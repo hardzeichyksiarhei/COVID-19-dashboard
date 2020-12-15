@@ -7,8 +7,10 @@ import PrimeVue from "primevue/config";
 
 import App from "./App.vue";
 
+import "./plugins/axios";
+
 /* Connect Styles */
-import "primevue/resources/themes/saga-blue/theme.css";
+import "primevue/resources/themes/md-dark-indigo/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 

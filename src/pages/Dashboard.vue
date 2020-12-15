@@ -2,10 +2,7 @@
   <div class="dashboard">
     <div class="dashboard-grid">
       <div class="dashboard-grid-col">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur
-        labore eum cupiditate corrupti fuga saepe fugit velit optio sequi
-        architecto, esse odit laborum temporibus modi sapiente obcaecati
-        voluptates quod iste.
+        <v-countries />
       </div>
       <div class="dashboard-grid-col">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium qui
@@ -23,9 +20,11 @@
 </template>
 
 <script>
+import VCountries from "../components/cards/VCountries";
+
 export default {
   name: "Dashboard",
-  components: {},
+  components: { VCountries },
 };
 </script>
 
