@@ -1,12 +1,15 @@
-import { createStore } from 'vuex'
+import { createStore } from "vuex";
+
+const initialState = () => ({
+  globalCases: null,
+
+  countries: [],
+  currentCountry: null,
+});
 
 export default createStore({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
-})
+  state: initialState(),
+  mutations: {},
+  actions: {},
+  modules: {},
+});
