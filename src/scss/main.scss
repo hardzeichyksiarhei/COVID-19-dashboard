@@ -1,0 +1,30 @@
+/* PrimeVue */
+@import 'primeflex/src/_variables.scss';
+
+/* Custom Variables */
+@import './variables';
+
+/* Custom Styles */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+}
+
+.app-toolbar {
+    height: 60px;
+    background-color: #e1e1e1;
+    padding: 10px;
+}
+
+.app-content {
+    flex-grow: 1;
+    padding: 10px;
+}
+
