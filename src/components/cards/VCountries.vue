@@ -41,7 +41,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      countries: "countries",
+      countries: "countries/countries",
     }),
   },
 
@@ -51,7 +51,7 @@ export default {
 
   methods: {
     ...mapActions({
-      fetchCountries: "fetchCountries",
+      fetchCountries: "countries/fetchCountries",
     }),
   },
 };
@@ -61,16 +61,25 @@ export default {
 .countries-list {
   .p-listbox-list-wrapper {
     &::-webkit-scrollbar {
-      width: 8px;
+      width: 6px;
       margin: 0 10px;
     }
     &::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 3px;
+      background: var(--surface-d);
+      border-radius: 4px;
     }
     &::-webkit-scrollbar-thumb {
-      background: #bdbdbd;
-      border-radius: 3px;
+      background: var(--primary-color);
+      border-radius: 4px;
+    }
+
+    .p-listbox-list {
+      .p-listbox-item {
+        &.p-highlight {
+          color: var(--primary-color);
+          background: rgba($primary-color, 0.05);
+        }
+      }
     }
   }
 }

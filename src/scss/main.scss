@@ -1,5 +1,4 @@
 /* PrimeVue */
-@import 'primeflex/src/_variables.scss';
 
 /* Custom Variables */
 @import './variables';
@@ -34,11 +33,11 @@ html, body {
     height: 60px;
     background-color: var(--surface-a);
     border-bottom: 1px solid var(--surface-d);
-    padding: 10px;
+    padding: 15px;
 }
 
 .app-content {
     flex-grow: 1;
-    padding: 10px;
+    padding: 15px;
 }
 

@@ -1,49 +1,20 @@
 import { createStore } from "vuex";
-import * as types from "./types";
 
-import covidService from "../services/covid.services";
+// Load store modules dynamically.
+const requireContext = require.context("./modules", false, /.*\.js$/);
 
-const initialState = () => ({
-  globalCases: null,
+const modules = requireContext
+  .keys()
+  .map((file) => [file.replace(/(^.\/)|(\.js$)/g, ""), requireContext(file)])
+  .reduce((modules, [name, module]) => {
+    if (module.namespaced === undefined) {
+      module.namespaced = true;
+    }
 
-  isCountriesLoading: false,
-  countries: [],
-
-  currentCountry: null,
-});
+    return { ...modules, [name]: module };
+  }, {});
 
 export default createStore({
-  state: initialState(),
-
-  getters: {
-    countries: (state) => state.countries,
-  },
-
-  mutations: {
-    [types.REQUESTED_COUNTRIES](state) {
-      state.isCountriesLoading = true;
-    },
-    [types.REQUESTED_COUNTRIES_SUCCEEDED](state, countries) {
-      state.countries = countries;
-      state.isCountriesLoading = false;
-    },
-    [types.REQUESTED_COUNTRIES_FAILED](state) {
-      state.countries = [];
-      state.isCountriesLoading = false;
-    },
-  },
-
-  actions: {
-    async fetchCountries({ commit }) {
-      commit(types.REQUESTED_COUNTRIES);
-      try {
-        const countries = await covidService.getCountries();
-        commit(types.REQUESTED_COUNTRIES_SUCCEEDED, countries);
-      } catch (error) {
-        commit(types.REQUESTED_COUNTRIES_FAILED, error);
-      }
-    },
-  },
-
-  modules: {},
+  modules,
+  strict: process.env.NODE_ENV !== "production",
 });

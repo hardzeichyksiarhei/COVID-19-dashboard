@@ -14,6 +14,9 @@ import "primevue/resources/themes/md-dark-indigo/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 
+/* Main Style */
+import "./scss/main.scss";
+
 const app = createApp(App);
 
 app.use(router);
