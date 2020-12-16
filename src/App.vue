@@ -7,3 +7,20 @@
     </div>
   </div>
 </template>
+
+<script>
+import { mapGetters } from "vuex";
+export default {
+  name: "App",
+
+  created() {
+    this.$store.dispatch("app/fetchCovidAll");
+  },
+
+  computed: {
+    ...mapGetters({
+      covidAll: "app/covidAll",
+    }),
+  },
+};
+</script>

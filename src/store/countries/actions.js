@@ -1,6 +1,6 @@
 import * as types from "./types";
 
-import covidService from "../../services/covid.services";
+import covidService from "../../services/countries.services";
 
 export default {
   async fetchCountries({ commit }) {
@@ -11,5 +11,11 @@ export default {
     } catch (error) {
       commit(types.REQUESTED_COUNTRIES_FAILED, error);
     }
+  },
+
+  setCurrentCountry({ commit }, country) {
+    // server
+
+    commit(types.SET_CURRENT_COUNTRY, country);
   },
 };

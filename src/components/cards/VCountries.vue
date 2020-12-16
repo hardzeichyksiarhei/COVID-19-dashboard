@@ -1,8 +1,10 @@
 <template>
   <div class="coutries-card">
+    <p>{{ currentCountry?.country }}</p>
     <Listbox
       class="countries-list"
       v-model="selectedCountry"
+      @change="handleChangeCountry"
       :options="countries"
       :filter="true"
       optionLabel="country"
@@ -42,6 +44,7 @@ export default {
   computed: {
     ...mapGetters({
       countries: "countries/countries",
+      currentCountry: "countries/currentCountry",
     }),
   },
 
@@ -52,7 +55,12 @@ export default {
   methods: {
     ...mapActions({
       fetchCountries: "countries/fetchCountries",
+      setCurrentCountry: "countries/setCurrentCountry",
     }),
+
+    handleChangeCountry({ value }) {
+      this.setCurrentCountry(value);
+    },
   },
 };
 </script>

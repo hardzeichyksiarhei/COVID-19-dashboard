@@ -1,8 +1,6 @@
 export const initialState = () => ({
-  isCountriesLoading: false,
-
-  currentCountry: null,
-  countries: [],
+  isConvidAllLoading: false,
+  covidAll: null,
 });
 
 // state

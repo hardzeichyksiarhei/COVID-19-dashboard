@@ -12,4 +12,8 @@ export default {
     state.countries = [];
     state.isCountriesLoading = false;
   },
+
+  [types.SET_CURRENT_COUNTRY](state, country) {
+    state.currentCountry = country;
+  },
 };
