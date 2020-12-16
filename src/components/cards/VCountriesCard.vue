@@ -3,79 +3,33 @@
     <button class="maximize-btn" @click="isMaximize = true">
       <i class="pi pi-window-maximize"></i>
     </button>
-    <Listbox
-      class="countries-list"
-      v-model="selectedCountry"
-      @change="handleChangeCountry"
-      :options="countries"
-      :filter="true"
-      optionLabel="country"
-      listStyle="height: 70vh"
-    >
-      <template #option="slotProps">
-        <div class="country-item">
-          <img
-            class="country-item__flag"
-            :alt="slotProps.option.country"
-            :src="slotProps.option.countryInfo.flag"
-          />
-          <span class="country-item__label">
-            {{ slotProps.option.country }}
-            <span class="country-item__cases">
-              ({{ slotProps.option.cases }})
-            </span>
-          </span>
-        </div>
-      </template>
-    </Listbox>
+    <v-countries-list :countries="countries" :height="'70vh'" />
   </div>
+
   <Dialog
     class="p-dialog-maximized"
     header="Cases by Country"
     v-model:visible="isMaximize"
   >
-    <Listbox
-      class="countries-list"
-      v-model="selectedCountry"
-      @change="handleChangeCountry"
-      :options="countries"
-      :filter="true"
-      optionLabel="country"
-      listStyle="height: calc(80vh - 10px)"
-    >
-      <template #option="slotProps">
-        <div class="country-item">
-          <img
-            class="country-item__flag"
-            :alt="slotProps.option.country"
-            :src="slotProps.option.countryInfo.flag"
-          />
-          <span class="country-item__label">
-            {{ slotProps.option.country }}
-            <span class="country-item__cases">
-              ({{ slotProps.option.cases }})
-            </span>
-          </span>
-        </div>
-      </template>
-    </Listbox>
+    <v-countries-list :countries="countries" :height="'calc(80vh - 10px)'" />
   </Dialog>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import Listbox from "primevue/listbox";
+
 import Dialog from "primevue/dialog";
+
+import VCountriesList from "../lists/VCountriesList";
 
 export default {
   name: "VCountriesCard",
 
-  components: { Listbox, Dialog },
+  components: { Dialog, VCountriesList },
 
   data() {
     return {
       isMaximize: false,
-      selectedCountry: null,
     };
   },
 
@@ -93,12 +47,7 @@ export default {
   methods: {
     ...mapActions({
       fetchCountries: "countries/fetchCountries",
-      setCurrentCountry: "countries/setCurrentCountry",
     }),
-
-    handleChangeCountry({ value }) {
-      this.setCurrentCountry(value);
-    },
   },
 };
 </script>
