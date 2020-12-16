@@ -18,7 +18,7 @@
         <span class="country-item__label">
           {{ slotProps.option.country }}
           <span class="country-item__cases">
-            ({{ slotProps.option.cases }})
+            ({{ $filters.numberFormat(slotProps.option.cases) }})
           </span>
         </span>
       </div>
@@ -30,6 +30,7 @@
 import { mapActions } from "vuex";
 
 import Listbox from "primevue/listbox";
+
 export default {
   name: "VCountriesList",
 

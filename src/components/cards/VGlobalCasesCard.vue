@@ -2,7 +2,7 @@
   <div class="global-cases-card">
     <div class="global-cases-card__title">Global Cases</div>
     <div class="global-cases-card__content">
-      {{ currentCountry ? currentCountry.cases : covidAll?.cases }}
+      {{ $filters.numberFormat(globalCases) }}
     </div>
   </div>
 </template>
@@ -18,6 +18,10 @@ export default {
       covidAll: "app/covidAll",
       currentCountry: "countries/currentCountry",
     }),
+
+    globalCases() {
+      return this.currentCountry?.cases || this.covidAll?.cases;
+    },
   },
 };
 </script>

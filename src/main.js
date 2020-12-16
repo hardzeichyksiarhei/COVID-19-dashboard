@@ -17,10 +17,19 @@ import "primeicons/primeicons.css";
 /* Main Style */
 import "./scss/main.scss";
 
-const app = createApp(App);
+export const app = createApp(App);
 
 app.use(router);
 app.use(store);
 app.use(PrimeVue);
 
 app.mount("#app");
+
+/* Global Filters */
+const NumberFormat = new Intl.NumberFormat("ru");
+
+app.config.globalProperties.$filters = {
+  numberFormat(value) {
+    return NumberFormat.format(value);
+  },
+};
