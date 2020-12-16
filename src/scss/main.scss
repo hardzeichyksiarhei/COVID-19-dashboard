@@ -41,3 +41,25 @@ html, body {
     padding: 15px;
 }
 
+.maximize-btn {
+    position: absolute;
+    right: -14px;
+    top: -14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    color: #fff;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    background-color: $primary-color;
+    opacity: 0;
+    transition: .25s opacity ease;
+    cursor: pointer;
+    &:focus {
+        outline: none;
+    }
+}
+
