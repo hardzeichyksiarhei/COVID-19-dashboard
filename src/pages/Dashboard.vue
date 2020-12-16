@@ -2,7 +2,8 @@
   <div class="dashboard">
     <div class="dashboard-grid">
       <div class="dashboard-grid-col">
-        <v-countries />
+        <v-global-cases-card />
+        <v-countries-card />
       </div>
       <div class="dashboard-grid-col">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium qui
@@ -20,18 +21,19 @@
 </template>
 
 <script>
-import VCountries from "../components/cards/VCountries";
+import VCountriesCard from "../components/cards/VCountriesCard";
+import VGlobalCasesCard from "../components/cards/VGlobalCasesCard";
 
 export default {
   name: "Dashboard",
-  components: { VCountries },
+  components: { VCountriesCard, VGlobalCasesCard },
 };
 </script>
 
 <style lang="scss" scoped>
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 320px auto 500px;
+  grid-template-columns: 320px 2fr 1fr;
   gap: 20px;
 }
 </style>

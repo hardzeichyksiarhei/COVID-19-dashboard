@@ -1,6 +1,5 @@
 <template>
   <div class="coutries-card">
-    <p>{{ currentCountry?.country }}</p>
     <Listbox
       class="countries-list"
       v-model="selectedCountry"
@@ -17,9 +16,12 @@
             :alt="slotProps.option.country"
             :src="slotProps.option.countryInfo.flag"
           />
-          <span class="country-item__label">{{
-            slotProps.option.country
-          }}</span>
+          <span class="country-item__label">
+            {{ slotProps.option.country }}
+            <span class="country-item__cases">
+              ({{ slotProps.option.cases }})
+            </span>
+          </span>
         </div>
       </template>
     </Listbox>
@@ -31,7 +33,7 @@ import { mapActions, mapGetters } from "vuex";
 import Listbox from "primevue/listbox";
 
 export default {
-  name: "VCountries",
+  name: "VCountriesCard",
 
   components: { Listbox },
 
@@ -99,6 +101,11 @@ export default {
     width: 36px;
     height: auto;
     margin-right: 10px;
+  }
+  &__cases {
+    color: $primary-color;
+    font-size: 14px;
+    font-weight: bold;
   }
 }
 </style>
