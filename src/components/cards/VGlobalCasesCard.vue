@@ -1,6 +1,10 @@
 <template>
   <div class="global-cases-card">
-    <div class="global-cases-card__title">Global Cases</div>
+    <div class="global-cases-card__title">
+      {{
+        currentCountry ? `Cases by: ${currentCountry.country}` : "Global Cases"
+      }}
+    </div>
     <div class="global-cases-card__content">
       {{ $filters.numberFormat(globalCases) }}
     </div>

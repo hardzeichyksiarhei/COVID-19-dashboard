@@ -21,8 +21,22 @@
         :stroke="location.current"
         :radius="location.radius"
       >
-        <l-popup>Hello!</l-popup></l-circle-marker
-      >
+        <l-popup :options="{ minWidth: '160' }">
+          <div class="map-country-popup">
+            <h4 class="map-country-popup__title">
+              {{ location.meta.country }}
+            </h4>
+            <div class="map-country-popup__info map-country-popup__info--cases">
+              Cases: <span>{{ location.meta.cases }}</span>
+            </div>
+            <div
+              class="map-country-popup__info map-country-popup__info--deaths"
+            >
+              Deaths: <span>{{ location.meta.deaths }}</span>
+            </div>
+          </div>
+        </l-popup>
+      </l-circle-marker>
     </l-map>
   </div>
 </template>
@@ -67,8 +81,11 @@ export default {
 
     locations() {
       const locations = this.countries.map(
-        ({ countryInfo: { _id: id, lat, long }, cases }) => ({
+        ({ countryInfo: { _id: id, lat, long }, country, cases, deaths }) => ({
           id,
+
+          meta: { country, cases, deaths },
+
           lat: Number(lat),
           long: Number(long),
           radius: this.scale(cases),
@@ -103,7 +120,7 @@ export default {
     },
     flyTo(lat, lon) {
       this.$refs.map.leafletObject.flyTo([lat, lon], this.zoom, {
-        animate: false,
+        animate: true,
       });
     },
     scale(d) {
@@ -127,5 +144,39 @@ export default {
 #map {
   width: 100%;
   height: 90vh;
+}
+
+::v-deep .leaflet-popup-content-wrapper {
+  background-color: var(--surface-a);
+  color: #fff;
+  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+::v-deep .leaflet-popup-content {
+  margin: 10px 30px;
+  margin-left: 10px;
+}
+
+::v-deep .leaflet-popup-tip {
+  background-color: var(--surface-a);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.map-country-popup {
+  &__title {
+    font-size: 20px;
+    margin: 0;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  &__info {
+    font-size: 14px;
+    &--cases {
+      span {
+        color: $primary-color;
+      }
+    }
+  }
 }
 </style>
