@@ -11,10 +11,7 @@
         eveniet eum iste deserunt odit officiis. Qui molestias dolor sequi.
       </div>
       <div class="dashboard-grid-col">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quas sapiente
-        labore facere impedit cumque, corporis, consequuntur obcaecati unde
-        ipsam laudantium nihil eum, ipsum nulla. Ipsum soluta tempora illum
-        nulla consectetur.
+        <v-table-card />
       </div>
     </div>
   </div>
@@ -23,10 +20,11 @@
 <script>
 import VCountriesCard from "../components/cards/VCountriesCard";
 import VGlobalCasesCard from "../components/cards/VGlobalCasesCard";
+import VTableCard from "../components/cards/VTableCard"
 
 export default {
   name: "Dashboard",
-  components: { VCountriesCard, VGlobalCasesCard },
+  components: { VCountriesCard, VGlobalCasesCard, VTableCard },
 };
 </script>
 

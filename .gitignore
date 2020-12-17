@@ -2,6 +2,9 @@
 node_modules
 /dist
 
+# Dependency directories
+node_modules/
+jspm_packages/
 
 # local env files
 .env.local
