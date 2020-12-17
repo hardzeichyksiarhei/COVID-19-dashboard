@@ -1,56 +1,81 @@
 <template>
-  <div id="map">
-    <l-map
-      ref="map"
-      v-model="zoom"
-      v-model:zoom="zoom"
-      :center="center"
-      @update:zoom="zoomUpdated"
-      @update:center="centerUpdated"
-      @ready="mapReady"
-    >
-      <l-tile-layer :url="tileLayerURL"></l-tile-layer>
-      <l-circle-marker
-        v-for="(location, idx) in locations"
-        :key="idx"
-        :lat-lng="[location.lat, location.long]"
-        :fillColor="!location.current ? 'red' : 'purple'"
-        :fillOpacity="!location.current ? 0.35 : 1"
-        :fill="true"
-        :color="location.current ? 'red' : 'transparent'"
-        :stroke="location.current"
-        :radius="location.radius"
+  <div class="map-card">
+    <div class="map-card-controls">
+      <v-indicators-select
+        :current-indicator="currentIndicator"
+        @change:indicator="handleChangeIndicator"
+      />
+    </div>
+
+    <div id="map">
+      <l-map
+        ref="map"
+        v-model="zoom"
+        v-model:zoom="zoom"
+        :center="center"
+        :minZoom="2"
+        :maxZoom="10"
+        :maxBounds="[
+          [-90, -180],
+          [90, 180],
+        ]"
+        @update:zoom="zoomUpdated"
+        @update:center="centerUpdated"
+        @ready="mapReady"
       >
-        <l-popup :options="{ minWidth: '160' }">
-          <div class="map-country-popup">
-            <h4 class="map-country-popup__title">
-              {{ location.meta.country }}
-            </h4>
-            <div class="map-country-popup__info map-country-popup__info--cases">
-              Cases: <span>{{ location.meta.cases }}</span>
+        <l-tile-layer :url="tileLayerURL"></l-tile-layer>
+        <l-circle-marker
+          v-for="(location, idx) in locations"
+          :key="idx"
+          :lat-lng="[location.lat, location.long]"
+          :fillColor="
+            !location.current ? FILL_COLOR[currentIndicator] : 'purple'
+          "
+          :fillOpacity="!location.current ? 0.35 : 1"
+          :fill="true"
+          :color="location.current ? 'red' : 'transparent'"
+          :stroke="location.current"
+          :radius="location.radius"
+          @click="handleClickCircleMarker(location.id)"
+        >
+          <l-tooltip :options="{ direction: 'top' }">
+            <div class="map-country-tooltip">
+              <h4 class="map-country-tooltip__title">
+                {{ location.meta.country }}
+              </h4>
+              <div
+                :class="`map-country-tooltip__info map-country-tooltip__info--${currentIndicator}`"
+              >
+                {{ $filters.capitalize(currentIndicator) }}:
+                <span>{{ location.meta[currentIndicator] }}</span>
+              </div>
             </div>
-            <div
-              class="map-country-popup__info map-country-popup__info--deaths"
-            >
-              Deaths: <span>{{ location.meta.deaths }}</span>
-            </div>
-          </div>
-        </l-popup>
-      </l-circle-marker>
-    </l-map>
+          </l-tooltip>
+        </l-circle-marker>
+      </l-map>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 import {
   LMap,
   LTileLayer,
   LCircleMarker,
-  LPopup,
+  LTooltip,
 } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
+
+import VIndicatorsSelect from "./VIndicatorsSelect";
+
+const FILL_COLOR = {
+  cases: "var(--cases-color)",
+  deaths: "var(--deaths-color)",
+  recovered: "var(--recovered-color)",
+  tests: "var(--tests-color)",
+};
 
 export default {
   name: "VMap",
@@ -59,12 +84,14 @@ export default {
     LMap,
     LTileLayer,
     LCircleMarker,
-    LPopup,
+    LTooltip,
+    VIndicatorsSelect,
   },
 
   data() {
     return {
-      map: null,
+      FILL_COLOR,
+      currentIndicator: "cases",
 
       tileLayerURL:
         "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
@@ -80,18 +107,22 @@ export default {
     }),
 
     locations() {
-      const locations = this.countries.map(
-        ({ countryInfo: { _id: id, lat, long }, country, cases, deaths }) => ({
-          id,
+      const locations = this.countries.map(({ countryInfo, ...country }) => ({
+        id: countryInfo._id,
 
-          meta: { country, cases, deaths },
+        meta: {
+          country: country.country,
+          cases: country.cases,
+          deaths: country.deaths,
+          recovered: country.recovered,
+          tests: country.tests,
+        },
 
-          lat: Number(lat),
-          long: Number(long),
-          radius: this.scale(cases),
-          current: id === this.currentCountry?.countryInfo._id,
-        })
-      );
+        lat: Number(countryInfo.lat),
+        long: Number(countryInfo.long),
+        radius: this.scale(country[this.currentIndicator]),
+        current: countryInfo._id === this.currentCountry?.countryInfo._id,
+      }));
       return locations;
     },
   },
@@ -108,6 +139,23 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      setCurrentCountry: "countries/setCurrentCountry",
+    }),
+
+    handleChangeIndicator(indicator) {
+      this.currentIndicator = indicator;
+    },
+
+    handleClickCircleMarker(countryId) {
+      const country =
+        this.countries.find(
+          (country) => country.countryInfo._id === countryId
+        ) || null;
+
+      this.setCurrentCountry(country);
+    },
+
     mapReady() {
       this.setUserLocation();
     },
@@ -120,7 +168,7 @@ export default {
     },
     flyTo(lat, lon) {
       this.$refs.map.leafletObject.flyTo([lat, lon], this.zoom, {
-        animate: true,
+        animate: false,
       });
     },
     scale(d) {
@@ -141,29 +189,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#map {
-  width: 100%;
-  height: 90vh;
+.map-card {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
-::v-deep .leaflet-popup-content-wrapper {
+.map-card-controls {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+#map {
+  width: 100%;
+  height: calc(100vh - 152px);
+}
+
+::v-deep .leaflet-top {
+  z-index: 100;
+}
+
+::v-deep .leaflet-tooltip {
+  min-width: 160px;
   background-color: var(--surface-a);
   color: #fff;
   border-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.3);
+  &:before {
+    display: none;
+  }
 }
 
-::v-deep .leaflet-popup-content {
-  margin: 10px 30px;
-  margin-left: 10px;
-}
-
-::v-deep .leaflet-popup-tip {
-  background-color: var(--surface-a);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.map-country-popup {
+.map-country-tooltip {
   &__title {
     font-size: 20px;
     margin: 0;
@@ -171,10 +230,28 @@ export default {
     font-weight: 500;
   }
   &__info {
-    font-size: 14px;
+    font-size: 16px;
+    span {
+      font-weight: bold;
+    }
     &--cases {
       span {
-        color: $primary-color;
+        color: $cases-color;
+      }
+    }
+    &--deaths {
+      span {
+        color: $deaths-color;
+      }
+    }
+    &--recovered {
+      span {
+        color: $recovered-color;
+      }
+    }
+    &--tests {
+      span {
+        color: $tests-color;
       }
     }
   }

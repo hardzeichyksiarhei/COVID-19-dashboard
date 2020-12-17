@@ -1,7 +1,17 @@
 $primary-color: #e53935;
 $accent-color:  #fb8c00;
 
+$cases-color: red;
+$deaths-color: maroon;
+$recovered-color: green;
+$tests-color: teal;
+
 :root {
     --primary-color: #{$primary-color};
     --accent-color: #{$accent-color};
+
+    --cases-color: #{$cases-color};
+    --deaths-color: #{$deaths-color};
+    --recovered-color: #{$recovered-color};
+    --tests-color: #{$tests-color};
 }
