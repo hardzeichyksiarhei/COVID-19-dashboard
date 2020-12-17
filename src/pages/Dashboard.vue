@@ -6,9 +6,7 @@
         <v-countries-card />
       </div>
       <div class="dashboard-grid-col">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium qui
-        sequi amet quis ullam expedita natus eius voluptatibus maiores, velit
-        eveniet eum iste deserunt odit officiis. Qui molestias dolor sequi.
+        <v-map />
       </div>
       <div class="dashboard-grid-col">
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quas sapiente
@@ -23,10 +21,11 @@
 <script>
 import VCountriesCard from "../components/cards/VCountriesCard";
 import VGlobalCasesCard from "../components/cards/VGlobalCasesCard";
+import VMap from "../components/VMap.vue";
 
 export default {
   name: "Dashboard",
-  components: { VCountriesCard, VGlobalCasesCard },
+  components: { VCountriesCard, VGlobalCasesCard, VMap },
 };
 </script>
 
