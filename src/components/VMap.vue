@@ -1,10 +1,11 @@
 <template>
   <div class="map-card">
-    <div class="map-card-controls">
+    <div class="map-card-header">
       <v-indicators-select
         :current-indicator="currentIndicator"
         @change:indicator="handleChangeIndicator"
       />
+      <v-map-legend />
     </div>
 
     <div id="map">
@@ -47,7 +48,9 @@
                 :class="`map-country-tooltip__info map-country-tooltip__info--${currentIndicator}`"
               >
                 {{ $filters.capitalize(currentIndicator) }}:
-                <span>{{ location.meta[currentIndicator] }}</span>
+                <span>{{
+                  $filters.numberFormat(location.meta[currentIndicator])
+                }}</span>
               </div>
             </div>
           </l-tooltip>
@@ -69,6 +72,7 @@ import {
 import "leaflet/dist/leaflet.css";
 
 import VIndicatorsSelect from "./VIndicatorsSelect";
+import VMapLegend from "./VMapLegend.vue";
 
 const FILL_COLOR = {
   cases: "var(--cases-color)",
@@ -86,6 +90,7 @@ export default {
     LCircleMarker,
     LTooltip,
     VIndicatorsSelect,
+    VMapLegend,
   },
 
   data() {
@@ -195,9 +200,10 @@ export default {
   overflow: hidden;
 }
 
-.map-card-controls {
+.map-card-header {
   height: 60px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 0 10px;
 }
