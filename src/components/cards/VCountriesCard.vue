@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
 
 import Dialog from "primevue/dialog";
 
@@ -27,27 +28,16 @@ export default {
 
   components: { Dialog, VCountriesList },
 
-  data() {
-    return {
-      isMaximize: false,
-    };
-  },
+  setup() {
+    const store = useStore();
 
-  computed: {
-    ...mapGetters({
-      countries: "countries/countries",
-      currentCountry: "countries/currentCountry",
-    }),
-  },
+    const isMaximize = ref(false);
 
-  created() {
-    this.fetchCountries();
-  },
+    const countries = computed(() => store.getters["countries/countries"]);
 
-  methods: {
-    ...mapActions({
-      fetchCountries: "countries/fetchCountries",
-    }),
+    store.dispatch("countries/fetchCountries");
+
+    return { isMaximize, countries };
   },
 };
 </script>
