@@ -15,15 +15,15 @@
 </template>
 
 <script>
-import VCountriesCard from "../components/cards/VCountriesCard";
-import VGlobalCasesCard from "../components/cards/VGlobalCasesCard";
+// import VCountriesCard from "../components/cards/VCountriesCard";
+// import VGlobalCasesCard from "../components/cards/VGlobalCasesCard";
 import VTableCard from "../components/cards/VTableCard";
 import VMap from "../components/VMap.vue";
 import VCountries from "../components/VCountries.vue";
 
 export default {
   name: "Dashboard",
-  components: { VCountries, VCountriesCard, VGlobalCasesCard, VTableCard, VMap},
+  components: { VCountries, VTableCard, VMap},
 };
 </script>
 

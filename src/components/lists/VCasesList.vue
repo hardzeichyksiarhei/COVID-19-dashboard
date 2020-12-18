@@ -1,17 +1,23 @@
 <template>
   <Card>
     <template #content>
-      <Dropdown v-model="indicator" @change="handleChangeIndicator" :options="indicators" optionLabel="label" placeholder="Select an indicator" />
+      <v-indicators-select width="100%" />
       <div class="global-cases-card">
-        <div class="global-cases-card__title">{{tableTitle}}</div>
-        <div class="global-cases-card__content">
+        <div class="global-cases-card__title">
+          {{
+            currentCountry
+              ? `${currentIndicator.label} by: ${currentCountry.country}`
+              : `Global ${currentIndicator.label}`
+          }}
+        </div>
+        <div :class="`global-cases-card__content ${currentIndicator.color}`">
           {{ $filters.numberFormat(globalIndicator) }}
         </div>
       </div>
-      <div class="card">
+      <div class="indicators-table-card">
         <DataTable :value="tableCountry" :scrollable="true" scrollHeight="40vh">
             <Column field="country" header="Country"></Column>
-            <Column :field="tableIndicator" :header="tableTitle" :color="tableIndicator.color"></Column>
+            <Column :field="tableIndicator" :header="tableTitle" :bodyClass="`indicators-table-card__content ${currentIndicator.color}`"></Column>
         </DataTable>
       </div>
     </template>
@@ -23,14 +29,15 @@
 import DataTable from 'primevue/datatable';
 import Card from 'primevue/card';
 import Column from 'primevue/column';
-import Dropdown from 'primevue/dropdown';
+// import Dropdown from 'primevue/dropdown';
+import VIndicatorsSelect from "../VIndicatorsSelect.vue";
 
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "VCasesList",
 
-  components: { Card, DataTable, Column, Dropdown },
+  components: { Card, DataTable, Column, VIndicatorsSelect },
 
   props: ["countries", "height"],
 
@@ -79,7 +86,40 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+  .p-datatable-scrollable-body{
+    &::-webkit-scrollbar {
+      width: 6px;
+      margin: 0 10px;
+    }
+    &::-webkit-scrollbar-track {
+      background: var(--surface-d);
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 4px;
+    }
+  }
+  .indicators-table-card{
+    &__content {
+        color: $primary-color;
+        font-weight: 600;
+        &.cases {
+          color: $cases-color;
+        }
+        &.deaths {
+          color: $deaths-color;
+        }
+        &.recovered {
+          color: $recovered-color;
+        }
+        &.tests {
+          color: $tests-color;
+        }
+    }
+  }
+
   .global-cases-card {
     display: flex;
     flex-direction: column;
@@ -89,6 +129,7 @@ export default {
     background: var(--surface-a);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 4px;
+    margin-top: 16px;
     &__title {
       font-size: 20px;
       margin-bottom: 5px;
@@ -96,6 +137,18 @@ export default {
     &__content {
       color: $primary-color;
       font-size: 32px;
+      &.cases {
+        color: $cases-color;
+      }
+      &.deaths {
+        color: $deaths-color;
+      }
+      &.recovered {
+        color: $recovered-color;
+      }
+      &.tests {
+        color: $tests-color;
+      }
     }
   }
 </style>
