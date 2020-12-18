@@ -1,10 +1,10 @@
 <template>
-  <div class="coutries-card">
-    <button class="maximize-btn" @click="isMaximize = true">
+  <div class="countries-card" :class="{ 'is-dialog': isDialog }">
+    <button v-if="!isDialog" class="maximize-btn" @click="$emit('dialog:show')">
       <i class="pi pi-window-maximize"></i>
     </button>
 
-    <div class="coutries-card__indicator-select">
+    <div class="countries-card__indicator-select">
       <v-indicators-select
         :current-indicator="localCurrentIndicator"
         @change:indicator="handleChangeIndicator"
@@ -16,29 +16,11 @@
       :current-indicator="localCurrentIndicator"
     />
   </div>
-
-  <Dialog
-    class="countries-dialog p-dialog-maximized"
-    :header="`${$filters.capitalize(localCurrentIndicator)} by Country`"
-    v-model:visible="isMaximize"
-  >
-    <v-indicators-select
-      :current-indicator="localCurrentIndicator"
-      @change:indicator="handleChangeIndicator"
-      width="200px"
-    />
-    <v-countries-list
-      :countries="countries"
-      :current-indicator="localCurrentIndicator"
-    />
-  </Dialog>
 </template>
 
 <script>
-import { ref, computed, toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import { useStore } from "vuex";
-
-import Dialog from "primevue/dialog";
 
 import VCountriesList from "../lists/VCountriesList";
 import VIndicatorsSelect from "../VIndicatorsSelect.vue";
@@ -46,17 +28,15 @@ import VIndicatorsSelect from "../VIndicatorsSelect.vue";
 export default {
   name: "VCountriesCard",
 
-  components: { Dialog, VCountriesList, VIndicatorsSelect },
+  components: { VCountriesList, VIndicatorsSelect },
 
-  props: ["currentIndicator"],
+  props: ["currentIndicator", "isDialog"],
 
   setup(props, { emit }) {
     const { currentIndicator } = toRefs(props);
     let localCurrentIndicator = currentIndicator;
 
     const store = useStore();
-
-    const isMaximize = ref(false);
 
     const countries = computed(() => store.getters["countries/countries"]);
     store.dispatch("countries/fetchCountries");
@@ -68,7 +48,6 @@ export default {
 
     return {
       localCurrentIndicator,
-      isMaximize,
       countries,
       handleChangeIndicator,
     };
@@ -77,7 +56,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.coutries-card {
+.countries-card {
   position: relative;
   background: var(--surface-a);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -100,14 +79,15 @@ export default {
   }
 }
 
-::v-deep .countries-dialog {
-  .indicators-select {
-    margin-bottom: 20px;
+.countries-card {
+  ::v-deep .countries-list .p-listbox-list-wrapper .p-listbox-list {
+    height: calc(65vh + 10px);
   }
-  .countries-list {
-    .p-listbox-list-wrapper .p-listbox-list {
-      height: 75vh;
-    }
+}
+
+.countries-card.is-dialog {
+  ::v-deep .countries-list .p-listbox-list-wrapper .p-listbox-list {
+    height: 75vh;
   }
 }
 </style>

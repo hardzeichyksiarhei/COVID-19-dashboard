@@ -72,7 +72,6 @@ export default {
     }
 
     .p-listbox-list {
-      height: calc(65vh + 10px);
       .p-listbox-item {
         &.p-highlight {
           color: var(--primary-color);
