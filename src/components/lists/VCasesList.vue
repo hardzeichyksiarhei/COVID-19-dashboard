@@ -1,18 +1,17 @@
 <template>
   <Card>
     <template #content>
+      <Dropdown v-model="indicator" @change="handleChangeIndicator" :options="indicators" optionLabel="label" placeholder="Select an indicator" />
       <div class="global-cases-card">
-        <div class="global-cases-card__title">Global cases</div>
+        <div class="global-cases-card__title">{{tableTitle}}</div>
         <div class="global-cases-card__content">
-          {{ $filters.numberFormat(globalCases) }}
+          {{ $filters.numberFormat(globalIndicator) }}
         </div>
       </div>
       <div class="card">
-        <DataTable :value="tableData" :scrollable="true" scrollHeight="40vh">
+        <DataTable :value="tableCountry" :scrollable="true" scrollHeight="40vh">
             <Column field="country" header="Country"></Column>
-            <Column field="cases" header="Cases"></Column>
-            <Column field="deaths" header="Deaths"></Column>
-            <Column field="recovered" header="Recovered"></Column>
+            <Column :field="tableIndicator" :header="tableTitle" :color="tableIndicator.color"></Column>
         </DataTable>
       </div>
     </template>
@@ -26,7 +25,7 @@ import Card from 'primevue/card';
 import Column from 'primevue/column';
 import Dropdown from 'primevue/dropdown';
 
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "VCasesList",
@@ -37,32 +36,44 @@ export default {
 
   data() {
     return {
-      // selectedIndicator: null,
-      selectedCountry: null,
+      indicator: this.currentIndicator,
     };
+  },
+
+  methods:{
+    ...mapActions({
+      setCurrentIndicator: "countries/setCurrentIndicator",
+    }),
+
+    handleChangeIndicator({ value }) {
+      this.setCurrentIndicator(value);
+    },
   },
 
   computed: {
     ...mapGetters({
       covidAll: "app/covidAll",
       currentCountry: "countries/currentCountry",
-      currentIndicator: "countries/currentIndicator"
+      currentIndicator: "countries/currentIndicator",
+      indicators: "countries/indicators",
     }),
 
     tableTitle(){
-      return this.currentCountry ? `${this.currentIndicator[0].toUpperCase() + this.currentIndicator.slice(1)} in ${this.currentCountry.country}` : `Global ${this.currentIndicator}`;
+      return this.currentIndicator.label;
     },
 
-    tableData(){
-      return this.currentCountry ? [this.currentCountry] : this.countries
+    tableCountry(){
+      return this.currentCountry ? [this.currentCountry] : this.countries;
     },
 
-    globalCases() {
-      if(this.currentIndicator){
-        return this.currentCountry?.[this.currentIndicator] || this.covidAll?.[this.currentIndicator]
-      }
-      return this.currentCountry?.cases || this.covidAll?.cases
+    tableIndicator(){
+      return this.currentIndicator.key;
     },
+
+    globalIndicator() {
+        return this.currentCountry?.[this.currentIndicator.key] || this.covidAll?.[this.currentIndicator.key]
+    },
+
   },
 
 }
