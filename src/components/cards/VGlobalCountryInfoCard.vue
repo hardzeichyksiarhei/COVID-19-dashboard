@@ -1,13 +1,13 @@
 <template>
-  <div class="global-cases-card">
-    <div class="global-cases-card__label">
+  <div class="global-country-info-card">
+    <div class="global-country-info-card__label">
       {{
         currentCountry
           ? `${currentIndicator.label} by: ${currentCountry.country}`
           : `Global ${currentIndicator.label}`
       }}
     </div>
-    <div :class="`global-cases-card__number ${currentIndicator.color}`">
+    <div :class="`global-country-info-card__number ${currentIndicator.color}`">
       {{ $filters.numberFormat(global[currentIndicator.key]) }}
     </div>
   </div>
@@ -17,7 +17,7 @@
 import { mapGetters } from "vuex";
 
 export default {
-  name: "VGlobalCasesCard",
+  name: "VGlobalCountryInfoCard",
 
   computed: {
     ...mapGetters({
@@ -35,7 +35,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.global-cases-card {
+.global-country-info-card {
   display: flex;
   flex-direction: column;
   justify-content: center;

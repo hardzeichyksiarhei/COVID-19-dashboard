@@ -1,6 +1,6 @@
 <template>
   <div class="countries">
-    <v-global-cases-card />
+    <v-global-country-info-card />
     <v-countries-card @dialog:show="isMaximize = true" />
   </div>
 
@@ -17,13 +17,13 @@
 import Dialog from "primevue/dialog";
 
 import VCountriesCard from "../components/cards/VCountriesCard";
-import VGlobalCasesCard from "../components/cards/VGlobalCasesCard";
+import VGlobalCountryInfoCard from "../components/cards/VGlobalCountryInfoCard";
 import { mapGetters } from "vuex";
 
 export default {
   name: "VCountries",
 
-  components: { Dialog, VCountriesCard, VGlobalCasesCard },
+  components: { Dialog, VCountriesCard, VGlobalCountryInfoCard },
 
   data() {
     return {
