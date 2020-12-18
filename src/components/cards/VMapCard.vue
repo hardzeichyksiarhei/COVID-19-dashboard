@@ -1,5 +1,9 @@
 <template>
-  <div class="map-card">
+  <div class="map-card" :class="{ 'is-dialog': isDialog }">
+    <button v-if="!isDialog" class="maximize-btn" @click="$emit('dialog:show')">
+      <i class="pi pi-window-maximize"></i>
+    </button>
+
     <div class="map-card-header">
       <div class="map-card-selects">
         <v-indicators-types-select width="100%" />
@@ -83,6 +87,8 @@ const FILL_COLOR = {
 
 export default {
   name: "VMapCard",
+
+  props: ["isDialog"],
 
   components: {
     LMap,
@@ -187,9 +193,14 @@ export default {
 
 <style lang="scss" scoped>
 .map-card {
+  position: relative;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
-  overflow: hidden;
+  &:hover {
+    .maximize-btn {
+      opacity: 1;
+    }
+  }
 }
 
 .map-card-header {
@@ -209,6 +220,10 @@ export default {
 #map {
   width: 100%;
   height: calc(100vh - 152px);
+}
+
+.map-card.is-dialog #map {
+  height: 80vh;
 }
 
 ::v-deep .leaflet-top,
