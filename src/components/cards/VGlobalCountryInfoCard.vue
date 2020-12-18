@@ -3,12 +3,15 @@
     <div class="global-country-info-card__label">
       {{
         currentCountry
-          ? `${currentIndicator.label} by: ${currentCountry.country}`
+          ? `${currentIndicator.label} by: ${currentCountry.name}`
           : `Global ${currentIndicator.label}`
       }}
     </div>
-    <div :class="`global-country-info-card__number ${currentIndicator.color}`">
-      {{ $filters.numberFormat(global[currentIndicator.key]) }}
+    <div
+      v-if="globalNumber"
+      :class="`global-country-info-card__number ${currentIndicator.color}`"
+    >
+      {{ globalNumber }}
     </div>
   </div>
 </template>
@@ -24,11 +27,18 @@ export default {
       covidAll: "app/covidAll",
       currentCountry: "countries/currentCountry",
       currentIndicator: "countries/currentIndicator",
+      currentIndicatorType: "countries/currentIndicatorType",
     }),
 
-    global() {
-      if (!this.currentCountry && !this.covidAll) return {};
-      return this.currentCountry || this.covidAll;
+    globalNumber() {
+      const obj = this.currentCountry || this.covidAll;
+      if (obj) {
+        return this.$filters.numberFormat(
+          obj[this.currentIndicatorType.key][this.currentIndicator.key]
+        );
+      }
+
+      return false;
     },
   },
 };

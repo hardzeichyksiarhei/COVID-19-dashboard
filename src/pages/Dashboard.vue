@@ -15,15 +15,21 @@
 </template>
 
 <script>
-// import VCountriesCard from "../components/cards/VCountriesCard";
-// import VGlobalCasesCard from "../components/cards/VGlobalCasesCard";
+import { useStore } from "vuex";
+
 import VTableCard from "../components/cards/VTableCard";
 import VMap from "../components/VMap.vue";
 import VCountries from "../components/VCountries.vue";
 
 export default {
   name: "Dashboard",
-  components: { VCountries, VTableCard, VMap},
+  components: { VCountries, VTableCard, VMap },
+
+  setup() {
+    const store = useStore();
+
+    store.dispatch("countries/fetchCountries");
+  },
 };
 </script>
 

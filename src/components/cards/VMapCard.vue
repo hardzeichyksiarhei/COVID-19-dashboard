@@ -1,7 +1,10 @@
 <template>
   <div class="map-card">
     <div class="map-card-header">
-      <v-indicators-select width="250px" />
+      <div class="map-card-selects">
+        <v-indicators-types-select width="100%" />
+        <v-indicators-select width="100%" />
+      </div>
       <v-map-legend />
     </div>
 
@@ -25,7 +28,7 @@
         <l-circle-marker
           v-for="(location, idx) in locations"
           :key="idx"
-          :lat-lng="[location.lat, location.long]"
+          :lat-lng="[location.meta.lat, location.meta.long]"
           :fillColor="
             !location.current ? FILL_COLOR[currentIndicator.color] : 'purple'
           "
@@ -38,15 +41,15 @@
         >
           <l-tooltip :options="{ direction: 'top' }">
             <div class="map-country-tooltip">
-              <h4 class="map-country-tooltip__title">
-                {{ location.meta.country }}
-              </h4>
+              <h4 class="map-country-tooltip__title">{{ location.name }}</h4>
               <div
                 :class="`map-country-tooltip__info map-country-tooltip__info--${currentIndicator.color}`"
               >
                 {{ currentIndicator.label }}:
                 <span>{{
-                  $filters.numberFormat(location.meta[currentIndicator.key])
+                  $filters.numberFormat(
+                    location[currentIndicatorType.key][currentIndicator.key]
+                  )
                 }}</span>
               </div>
             </div>
@@ -69,13 +72,13 @@ import {
 import "leaflet/dist/leaflet.css";
 
 import VIndicatorsSelect from "../VIndicatorsSelect";
+import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
 import VMapLegend from "../VMapLegend.vue";
 
 const FILL_COLOR = {
   cases: "var(--cases-color)",
   deaths: "var(--deaths-color)",
   recovered: "var(--recovered-color)",
-  tests: "var(--tests-color)",
 };
 
 export default {
@@ -87,6 +90,7 @@ export default {
     LCircleMarker,
     LTooltip,
     VIndicatorsSelect,
+    VIndicatorsTypesSelect,
     VMapLegend,
   },
 
@@ -106,31 +110,17 @@ export default {
       countries: "countries/countries",
       currentCountry: "countries/currentCountry",
       currentIndicator: "countries/currentIndicator",
+      currentIndicatorType: "countries/currentIndicatorType",
     }),
 
     locations() {
-      const locations = this.countries.map(({ countryInfo, ...country }) => ({
-        id: countryInfo._id,
-
-        meta: {
-          country: country.country,
-          cases: country.cases,
-          todayCases: country.todayCases,
-
-          deaths: country.deaths,
-          todayDeaths: country.todayDeaths,
-
-          recovered: country.recovered,
-          todayRecovered: country.todayRecovered,
-          // tests: country.tests,
-        },
-
-        lat: Number(countryInfo.lat),
-        long: Number(countryInfo.long),
-        radius: this.scale(country[this.currentIndicator.key]),
-        current: countryInfo._id === this.currentCountry?.countryInfo._id,
+      return this.countries.map((country) => ({
+        ...country,
+        radius: this.scale(
+          country[this.currentIndicatorType.key][this.currentIndicator.key]
+        ),
+        current: country.id === this.currentCountry?.id,
       }));
-      return locations;
     },
   },
 
@@ -139,7 +129,7 @@ export default {
       if (!country) return;
 
       const {
-        countryInfo: { lat, long },
+        meta: { lat, long },
       } = country;
       this.flyTo(lat, long);
     },
@@ -208,6 +198,12 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0 10px;
+}
+
+.map-card-selects {
+  display: grid;
+  grid-template-columns: 200px 200px;
+  gap: 10px;
 }
 
 #map {

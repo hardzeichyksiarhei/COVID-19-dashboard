@@ -20,4 +20,8 @@ export default {
   [types.SET_CURRENT_INDICATOR](state, indicator) {
     state.currentIndicator = indicator;
   },
+
+  [types.SET_CURRENT_INDICATOR_TYPE](state, indicatorType) {
+    state.currentIndicatorType = indicatorType;
+  },
 };

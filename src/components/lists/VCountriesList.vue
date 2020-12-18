@@ -10,14 +10,16 @@
       <div class="country-item">
         <img
           class="country-item__flag"
-          :alt="slotProps.option.country"
-          :src="slotProps.option.countryInfo.flag"
+          :alt="slotProps.option.name"
+          :src="slotProps.option.meta.flag"
         />
         <span class="country-item__label">
-          {{ slotProps.option.country }}
+          {{ slotProps.option.name }}
           <span :class="`country-item__number ${currentIndicator.color}`">
             ({{
-              $filters.numberFormat(slotProps.option[currentIndicator.key])
+              $filters.numberFormat(
+                slotProps.option[currentIndicatorType.key][currentIndicator.key]
+              )
             }})
           </span>
         </span>
@@ -42,11 +44,14 @@ export default {
     ...mapGetters({
       currentCountry: "countries/currentCountry",
       currentIndicator: "countries/currentIndicator",
+      currentIndicatorType: "countries/currentIndicatorType",
     }),
     localCountries() {
       const countries = [...this.countries];
       countries.sort(
-        (a, b) => b[this.currentIndicator.key] - a[this.currentIndicator.key]
+        (a, b) =>
+          b[this.currentIndicatorType.key][this.currentIndicator.key] -
+          a[this.currentIndicatorType.key][this.currentIndicator.key]
       );
       return countries;
     },

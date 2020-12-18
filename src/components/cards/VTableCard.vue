@@ -34,61 +34,62 @@ export default {
 
     const countries = computed(() => store.getters["countries/countries"]);
 
-    store.dispatch("countries/fetchCountries");
+    // Deprecated: Moved to Dashboard component
+    // store.dispatch("countries/fetchCountries");
 
     return { isMaximize, countries };
   },
-}
+};
 </script>
 
 <style lang="scss">
-  .coutries-card {
-    position: relative;
-    &:hover {
-      .maximize-btn {
-        opacity: 1;
-      }
+.coutries-card {
+  position: relative;
+  &:hover {
+    .maximize-btn {
+      opacity: 1;
     }
   }
+}
 
-  .countries-list {
-    .p-listbox-list-wrapper {
-      &::-webkit-scrollbar {
-        width: 6px;
-        // margin: 0 10px;
-      }
-      &::-webkit-scrollbar-track {
-        background: var(--surface-d);
-        border-radius: 4px;
-      }
-      &::-webkit-scrollbar-thumb {
-        background: var(--primary-color);
-        border-radius: 4px;
-      }
+.countries-list {
+  .p-listbox-list-wrapper {
+    &::-webkit-scrollbar {
+      width: 6px;
+      // margin: 0 10px;
+    }
+    &::-webkit-scrollbar-track {
+      background: var(--surface-d);
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 4px;
+    }
 
-      .p-listbox-list {
-        .p-listbox-item {
-          &.p-highlight {
-            color: var(--primary-color);
-            background: rgba($primary-color, 0.05);
-          }
+    .p-listbox-list {
+      .p-listbox-item {
+        &.p-highlight {
+          color: var(--primary-color);
+          background: rgba($primary-color, 0.05);
         }
       }
     }
   }
+}
 
-  .country-item {
-    display: flex;
-    align-items: center;
-    &__flag {
-      width: 36px;
-      height: auto;
-      margin-right: 10px;
-    }
-    &__cases {
-      color: $primary-color;
-      font-size: 14px;
-      font-weight: bold;
-    }
+.country-item {
+  display: flex;
+  align-items: center;
+  &__flag {
+    width: 36px;
+    height: auto;
+    margin-right: 10px;
   }
+  &__cases {
+    color: $primary-color;
+    font-size: 14px;
+    font-weight: bold;
+  }
+}
 </style>

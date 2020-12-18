@@ -5,6 +5,7 @@
     </button>
 
     <div class="countries-card__indicator-select">
+      <v-indicators-types-select width="100%" />
       <v-indicators-select width="100%" />
     </div>
     <v-countries-list :countries="countries" />
@@ -16,12 +17,13 @@ import { computed, toRefs } from "vue";
 import { useStore } from "vuex";
 
 import VCountriesList from "../lists/VCountriesList";
-import VIndicatorsSelect from "../VIndicatorsSelect.vue";
+import VIndicatorsSelect from "../VIndicatorsSelect";
+import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
 
 export default {
   name: "VCountriesCard",
 
-  components: { VCountriesList, VIndicatorsSelect },
+  components: { VCountriesList, VIndicatorsSelect, VIndicatorsTypesSelect },
 
   props: ["isDialog"],
 
@@ -32,7 +34,6 @@ export default {
     const store = useStore();
 
     const countries = computed(() => store.getters["countries/countries"]);
-    store.dispatch("countries/fetchCountries");
 
     const handleChangeIndicator = (indicator) => {
       localCurrentIndicator = indicator;
@@ -61,6 +62,9 @@ export default {
   }
 
   &__indicator-select {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
     padding: 1rem;
     padding-bottom: 0;
   }

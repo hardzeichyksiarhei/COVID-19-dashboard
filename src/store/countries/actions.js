@@ -20,4 +20,8 @@ export default {
   setCurrentIndicator({ commit }, indicator) {
     commit(types.SET_CURRENT_INDICATOR, indicator);
   },
+
+  setCurrentIndicatorType({ commit }, indicatorType) {
+    commit(types.SET_CURRENT_INDICATOR_TYPE, indicatorType);
+  },
 };
