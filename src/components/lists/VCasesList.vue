@@ -2,72 +2,62 @@
   <Card>
     <template #content>
       <div class="global-cases-card">
-        <div class="global-cases-card__title">{{tableTitle}}</div>
+        <div class="global-cases-card__title">Global cases</div>
         <div class="global-cases-card__content">
           {{ $filters.numberFormat(globalCases) }}
         </div>
       </div>
-      <Listbox
-        class="countries-list"
-        header="Cases by Country"
-        v-model="selectedCountry"
-        @change="handleChangeCountry"
-        :options="countries"
-        :filter="true"
-        optionLabel="country"
-        :listStyle="`height: ${height}`"
-      >
-        <template #option="slotProps">
-          <div class="country-item">
-            <span class="country-item__label">
-              {{ slotProps.option.country }}
-              <br>
-              <span class="country-item__cases">
-                ({{ $filters.numberFormat(slotProps.option.cases) }})
-              </span>
-            </span>
-          </div>
-        </template>
-      </Listbox>
-      <Dropdown v-model="selectedIndicator" :options="indicators" optionLabel="name" placeholder="Select an indicator" />
+      <div class="card">
+        <DataTable :value="countries" :scrollable="true" scrollHeight="40vh">
+            <Column field="country" header="Country"></Column>
+            <Column field="cases" header="Cases"></Column>
+            <Column field="deaths" header="Deaths"></Column>
+            <Column field="recovered" header="Recovered"></Column>
+        </DataTable>
+      </div>
     </template>
   </Card>
 </template>
 
 <script>
 
-import Listbox from "primevue/listbox";
+// import Listbox from "primevue/listbox";
+import DataTable from 'primevue/datatable';
 import Card from 'primevue/card';
-import Dropdown from 'primevue/dropdown';
+import Column from 'primevue/column';
+// import ColumnGroup from 'primevue/columngroup'; 
+// import Dropdown from 'primevue/dropdown';
 
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "VCasesList",
 
-  components: { Listbox, Card, Dropdown },
+  components: { Card, DataTable, Column },
 
   props: ["countries", "height"],
 
    data() {
     return {
+      // allcountries: null,
       selectedCountry: null,
-      selectedIndicator: null,
-      indicators: [
-        {name: 'Deaths', code: 'deaths'},
-        {name: 'Cases', code: 'cases'},
-        {name: 'Recovered', code: 'recovered'},
-      ]
+      // selectedIndicator: null,
+      // indicators: [
+      //   {name: 'Deaths', code: 'deaths'},
+      //   {name: 'Cases', code: 'cases'},
+      //   {name: 'Recovered', code: 'recovered'},
+      // ]
     };
   },
 
+
   methods: {
     ...mapActions({
-      setCurrentCountry: "countries/setCurrentCountry",
+      setCurrentIndicator: "countries/setCurrentIndicator",
     }),
 
-    handleChangeCountry({ value }) {
-      this.setCurrentCountry(value);
+    handleChangeIndicator({ value }) {
+      this.setCurrentIndicator(value.code);
     },
   },
 
@@ -75,14 +65,18 @@ export default {
     ...mapGetters({
       covidAll: "app/covidAll",
       currentCountry: "countries/currentCountry",
+      currentIndicator: "countries/currentIndicator"
     }),
 
     tableTitle(){
-      return this.currentCountry ? `Cases in ${this.currentCountry.country}` : 'Global cases';
+      return this.currentCountry ? `${this.currentIndicator[0].toUpperCase() + this.currentIndicator.slice(1)} in ${this.currentCountry.country}` : `Global ${this.currentIndicator}`;
     },
 
     globalCases() {
-      return this.currentCountry?.cases || this.covidAll?.cases;
+      if(this.currentIndicator){
+        return this.currentCountry?.[this.currentIndicator] || this.covidAll?.[this.currentIndicator]
+      }
+      return this.currentCountry?.cases || this.covidAll?.cases
     },
   },
 

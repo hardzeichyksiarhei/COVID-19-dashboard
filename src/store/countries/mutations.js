@@ -16,4 +16,8 @@ export default {
   [types.SET_CURRENT_COUNTRY](state, country) {
     state.currentCountry = country;
   },
+
+  [types.SET_CURRENT_INDICATOR](state, indicator) {
+    state.currentIndicator = indicator;
+  },
 };
