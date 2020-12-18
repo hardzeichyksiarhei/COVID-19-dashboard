@@ -2,8 +2,7 @@
   <Listbox
     class="countries-list"
     v-model="selectedCountry"
-    @change="handleChangeCountry"
-    :options="countries"
+    :options="localCountries"
     :filter="true"
     optionLabel="country"
   >
@@ -16,8 +15,10 @@
         />
         <span class="country-item__label">
           {{ slotProps.option.country }}
-          <span :class="`country-item__number ${currentIndicator}`">
-            ({{ $filters.numberFormat(slotProps.option[currentIndicator]) }})
+          <span :class="`country-item__number ${currentIndicator.color}`">
+            ({{
+              $filters.numberFormat(slotProps.option[currentIndicator.key])
+            }})
           </span>
         </span>
       </div>
@@ -26,7 +27,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 import Listbox from "primevue/listbox";
 
@@ -37,20 +38,31 @@ export default {
 
   props: ["countries", "currentIndicator"],
 
-  data() {
-    return {
-      selectedCountry: null,
-    };
+  computed: {
+    ...mapGetters({
+      currentCountry: "countries/currentCountry",
+    }),
+    localCountries() {
+      const countries = [...this.countries];
+      countries.sort(
+        (a, b) => b[this.currentIndicator.key] - a[this.currentIndicator.key]
+      );
+      return countries;
+    },
+    selectedCountry: {
+      get() {
+        return this.currentCountry;
+      },
+      set(country) {
+        this.setCurrentCountry(country);
+      },
+    },
   },
 
   methods: {
     ...mapActions({
       setCurrentCountry: "countries/setCurrentCountry",
     }),
-
-    handleChangeCountry({ value }) {
-      this.setCurrentCountry(value);
-    },
   },
 };
 </script>
@@ -75,7 +87,7 @@ export default {
       .p-listbox-item {
         &.p-highlight {
           color: var(--primary-color);
-          background: rgba($primary-color, 0.05);
+          background: rgba($primary-color, 0.2);
         }
       }
     }
@@ -89,6 +101,9 @@ export default {
     width: 36px;
     height: auto;
     margin-right: 10px;
+  }
+  &__label {
+    font-size: 16px;
   }
   &__number {
     color: $primary-color;

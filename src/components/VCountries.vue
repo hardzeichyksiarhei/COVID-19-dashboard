@@ -27,6 +27,8 @@ import Dialog from "primevue/dialog";
 import VCountriesCard from "../components/cards/VCountriesCard";
 import VGlobalCasesCard from "../components/cards/VGlobalCasesCard";
 
+import { indicators } from "../helpers/indicators";
+
 export default {
   name: "VCountries",
 
@@ -35,7 +37,7 @@ export default {
   data() {
     return {
       isMaximize: false,
-      currentIndicator: "cases",
+      currentIndicator: indicators[0],
     };
   },
 

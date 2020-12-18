@@ -6,7 +6,6 @@
       v-model="localCurrentIndicator"
       :options="indicators"
       optionLabel="label"
-      optionValue="key"
       @change="handleChangeIndicator"
     />
   </div>
@@ -14,6 +13,8 @@
 
 <script>
 import Dropdown from "primevue/dropdown";
+
+import { indicators } from "../helpers/indicators";
 
 export default {
   name: "VIndicatorsSelect",
@@ -27,18 +28,16 @@ export default {
   data() {
     return {
       localCurrentIndicator: this.currentIndicator,
-      indicators: [
-        { key: "cases", label: "Cases" },
-        { key: "deaths", label: "Deaths" },
-        { key: "recovered", label: "Recovered" },
-        { key: "tests", label: "Tests" },
-      ],
+      indicators,
     };
   },
 
   methods: {
-    handleChangeIndicator(indicator) {
-      this.$emit("change:indicator", indicator.value);
+    handleChangeIndicator({ value }) {
+      const indicator = this.indicators.find(
+        (indicator) => indicator.key === value.key
+      );
+      this.$emit("change:indicator", indicator);
     },
   },
 };

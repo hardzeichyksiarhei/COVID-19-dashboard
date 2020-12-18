@@ -30,7 +30,7 @@
           :key="idx"
           :lat-lng="[location.lat, location.long]"
           :fillColor="
-            !location.current ? FILL_COLOR[currentIndicator] : 'purple'
+            !location.current ? FILL_COLOR[currentIndicator.color] : 'purple'
           "
           :fillOpacity="!location.current ? 0.35 : 1"
           :fill="true"
@@ -45,11 +45,11 @@
                 {{ location.meta.country }}
               </h4>
               <div
-                :class="`map-country-tooltip__info map-country-tooltip__info--${currentIndicator}`"
+                :class="`map-country-tooltip__info map-country-tooltip__info--${currentIndicator.color}`"
               >
-                {{ $filters.capitalize(currentIndicator) }}:
+                {{ currentIndicator.label }}:
                 <span>{{
-                  $filters.numberFormat(location.meta[currentIndicator])
+                  $filters.numberFormat(location.meta[currentIndicator.key])
                 }}</span>
               </div>
             </div>
@@ -74,6 +74,8 @@ import "leaflet/dist/leaflet.css";
 import VIndicatorsSelect from "../VIndicatorsSelect";
 import VMapLegend from "../VMapLegend.vue";
 
+import { indicators } from "../../helpers/indicators";
+
 const FILL_COLOR = {
   cases: "var(--cases-color)",
   deaths: "var(--deaths-color)",
@@ -96,7 +98,7 @@ export default {
   data() {
     return {
       FILL_COLOR,
-      currentIndicator: "cases",
+      currentIndicator: indicators[0],
 
       tileLayerURL:
         "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
@@ -118,14 +120,19 @@ export default {
         meta: {
           country: country.country,
           cases: country.cases,
+          todayCases: country.todayCases,
+
           deaths: country.deaths,
+          todayDeaths: country.todayDeaths,
+
           recovered: country.recovered,
-          tests: country.tests,
+          todayRecovered: country.todayRecovered,
+          // tests: country.tests,
         },
 
         lat: Number(countryInfo.lat),
         long: Number(countryInfo.long),
-        radius: this.scale(country[this.currentIndicator]),
+        radius: this.scale(country[this.currentIndicator.key]),
         current: countryInfo._id === this.currentCountry?.countryInfo._id,
       }));
       return locations;

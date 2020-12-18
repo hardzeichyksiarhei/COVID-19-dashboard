@@ -7,7 +7,6 @@ export default {
     commit(types.REQUESTED_COUNTRIES);
     try {
       const countries = await covidService.getCountries();
-      countries.sort((a, b) => b.cases - a.cases);
       commit(types.REQUESTED_COUNTRIES_SUCCEEDED, countries);
     } catch (error) {
       commit(types.REQUESTED_COUNTRIES_FAILED, error);

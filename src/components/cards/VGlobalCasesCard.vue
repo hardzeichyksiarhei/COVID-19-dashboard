@@ -3,14 +3,12 @@
     <div class="global-cases-card__label">
       {{
         currentCountry
-          ? `${$filters.capitalize(currentIndicator)} by: ${
-              currentCountry.country
-            }`
-          : `Global ${$filters.capitalize(currentIndicator)}`
+          ? `${currentIndicator.label} by: ${currentCountry.country}`
+          : `Global ${currentIndicator.label}`
       }}
     </div>
-    <div :class="`global-cases-card__number ${currentIndicator}`">
-      {{ $filters.numberFormat(global[currentIndicator]) }}
+    <div :class="`global-cases-card__number ${currentIndicator.color}`">
+      {{ $filters.numberFormat(global[currentIndicator.key]) }}
     </div>
   </div>
 </template>
