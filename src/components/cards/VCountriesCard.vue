@@ -1,95 +1,86 @@
 <template>
-  <div class="coutries-card">
-    <button class="maximize-btn" @click="isMaximize = true">
+  <div class="countries-card" :class="{ 'is-dialog': isDialog }">
+    <button v-if="!isDialog" class="maximize-btn" @click="$emit('dialog:show')">
       <i class="pi pi-window-maximize"></i>
     </button>
-    <v-countries-list :countries="countries" :height="'70vh'" />
-  </div>
 
-  <Dialog
-    class="p-dialog-maximized"
-    header="Cases by Country"
-    v-model:visible="isMaximize"
-  >
-    <v-countries-list :countries="countries" :height="'calc(80vh - 10px)'" />
-  </Dialog>
+    <div class="countries-card__indicator-select">
+      <v-indicators-select width="100%" />
+    </div>
+    <v-countries-list :countries="countries" />
+  </div>
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { computed, toRefs } from "vue";
 import { useStore } from "vuex";
 
-import Dialog from "primevue/dialog";
-
 import VCountriesList from "../lists/VCountriesList";
+import VIndicatorsSelect from "../VIndicatorsSelect.vue";
 
 export default {
   name: "VCountriesCard",
 
-  components: { Dialog, VCountriesList },
+  components: { VCountriesList, VIndicatorsSelect },
 
-  setup() {
+  props: ["isDialog"],
+
+  setup(props, { emit }) {
+    const { currentIndicator } = toRefs(props);
+    let localCurrentIndicator = currentIndicator;
+
     const store = useStore();
 
-    const isMaximize = ref(false);
-
     const countries = computed(() => store.getters["countries/countries"]);
-
     store.dispatch("countries/fetchCountries");
 
-    return { isMaximize, countries };
+    const handleChangeIndicator = (indicator) => {
+      localCurrentIndicator = indicator;
+      emit("change:indicator", indicator);
+    };
+
+    return {
+      localCurrentIndicator,
+      countries,
+      handleChangeIndicator,
+    };
   },
 };
 </script>
 
-<style lang="scss">
-.coutries-card {
+<style lang="scss" scoped>
+.countries-card {
   position: relative;
+  background: var(--surface-a);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
   &:hover {
     .maximize-btn {
       opacity: 1;
     }
   }
-}
 
-.countries-list {
-  .p-listbox-list-wrapper {
-    &::-webkit-scrollbar {
-      width: 6px;
-      margin: 0 10px;
-    }
-    &::-webkit-scrollbar-track {
-      background: var(--surface-d);
-      border-radius: 4px;
-    }
-    &::-webkit-scrollbar-thumb {
-      background: var(--primary-color);
-      border-radius: 4px;
-    }
+  &__indicator-select {
+    padding: 1rem;
+    padding-bottom: 0;
+  }
 
-    .p-listbox-list {
-      .p-listbox-item {
-        &.p-highlight {
-          color: var(--primary-color);
-          background: rgba($primary-color, 0.05);
-        }
-      }
-    }
+  .countries-list {
+    background: transparent;
+    border: none;
+    border-radius: none;
   }
 }
 
-.country-item {
-  display: flex;
-  align-items: center;
-  &__flag {
-    width: 36px;
-    height: auto;
-    margin-right: 10px;
+.countries-card {
+  ::v-deep .countries-list .p-listbox-list-wrapper .p-listbox-list {
+    height: calc(65vh + 10px);
   }
-  &__cases {
-    color: $primary-color;
-    font-size: 14px;
-    font-weight: bold;
+}
+
+.countries-card.is-dialog {
+  ::v-deep .countries-list .p-listbox-list-wrapper .p-listbox-list {
+    height: 75vh;
   }
 }
 </style>

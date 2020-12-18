@@ -9,6 +9,6 @@ export default {
 
   countryById: (state) => (id) =>
     state.countries.find(({ countryInfo }) => countryInfo._id === id) || null,
-  
+
   indicators: (state) => state.indicators,
 };

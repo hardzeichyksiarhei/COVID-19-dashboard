@@ -2,11 +2,9 @@
   <Listbox
     class="countries-list"
     v-model="selectedCountry"
-    @change="handleChangeCountry"
-    :options="countries"
+    :options="localCountries"
     :filter="true"
     optionLabel="country"
-    :listStyle="`height: ${height}`"
   >
     <template #option="slotProps">
       <div class="country-item">
@@ -17,8 +15,10 @@
         />
         <span class="country-item__label">
           {{ slotProps.option.country }}
-          <span class="country-item__cases">
-            ({{ $filters.numberFormat(slotProps.option.cases) }})
+          <span :class="`country-item__number ${currentIndicator.color}`">
+            ({{
+              $filters.numberFormat(slotProps.option[currentIndicator.key])
+            }})
           </span>
         </span>
       </div>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 import Listbox from "primevue/listbox";
 
@@ -36,25 +36,92 @@ export default {
 
   components: { Listbox },
 
-  props: ["countries", "height"],
+  props: ["countries"],
 
-  data() {
-    return {
-      selectedCountry: null,
-    };
+  computed: {
+    ...mapGetters({
+      currentCountry: "countries/currentCountry",
+      currentIndicator: "countries/currentIndicator",
+    }),
+    localCountries() {
+      const countries = [...this.countries];
+      countries.sort(
+        (a, b) => b[this.currentIndicator.key] - a[this.currentIndicator.key]
+      );
+      return countries;
+    },
+    selectedCountry: {
+      get() {
+        return this.currentCountry;
+      },
+      set(country) {
+        this.setCurrentCountry(country);
+      },
+    },
   },
 
   methods: {
     ...mapActions({
       setCurrentCountry: "countries/setCurrentCountry",
     }),
-
-    handleChangeCountry({ value }) {
-      this.setCurrentCountry(value);
-    },
   },
 };
 </script>
 
-<style>
+<style lang="scss">
+.countries-list {
+  .p-listbox-list-wrapper {
+    &::-webkit-scrollbar {
+      width: 6px;
+      margin: 0 10px;
+    }
+    &::-webkit-scrollbar-track {
+      background: var(--surface-d);
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 4px;
+    }
+
+    .p-listbox-list {
+      .p-listbox-item {
+        &.p-highlight {
+          color: var(--primary-color);
+          background: rgba($primary-color, 0.2);
+        }
+      }
+    }
+  }
+}
+
+.country-item {
+  display: flex;
+  align-items: center;
+  &__flag {
+    width: 36px;
+    height: auto;
+    margin-right: 10px;
+  }
+  &__label {
+    font-size: 16px;
+  }
+  &__number {
+    color: $primary-color;
+    font-size: 14px;
+    font-weight: bold;
+    &.cases {
+      color: $cases-color;
+    }
+    &.deaths {
+      color: $deaths-color;
+    }
+    &.recovered {
+      color: $recovered-color;
+    }
+    &.tests {
+      color: $tests-color;
+    }
+  }
+}
 </style>

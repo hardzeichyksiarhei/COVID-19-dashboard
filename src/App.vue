@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="app">
-    <div class="app-toolbar">Toolbar</div>
+    <div class="app-toolbar">COVID-19 Dashboard</div>
 
     <div class="app-content">
       <router-view />

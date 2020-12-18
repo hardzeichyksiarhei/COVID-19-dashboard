@@ -2,13 +2,10 @@
   <div class="dashboard">
     <div class="dashboard-grid">
       <div class="dashboard-grid-col">
-        <v-global-cases-card />
-        <v-countries-card />
+        <v-countries />
       </div>
       <div class="dashboard-grid-col">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium qui
-        sequi amet quis ullam expedita natus eius voluptatibus maiores, velit
-        eveniet eum iste deserunt odit officiis. Qui molestias dolor sequi.
+        <v-map />
       </div>
       <div class="dashboard-grid-col">
         <v-table-card />
@@ -20,11 +17,13 @@
 <script>
 import VCountriesCard from "../components/cards/VCountriesCard";
 import VGlobalCasesCard from "../components/cards/VGlobalCasesCard";
-import VTableCard from "../components/cards/VTableCard"
+import VTableCard from "../components/cards/VTableCard";
+import VMap from "../components/VMap.vue";
+import VCountries from "../components/VCountries.vue";
 
 export default {
   name: "Dashboard",
-  components: { VCountriesCard, VGlobalCasesCard, VTableCard },
+  components: { VCountries, VCountriesCard, VGlobalCasesCard, VTableCard, VMap},
 };
 </script>
 
