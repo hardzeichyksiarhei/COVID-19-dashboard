@@ -1,10 +1,7 @@
 <template>
   <div class="map-card">
     <div class="map-card-header">
-      <v-indicators-select
-        :current-indicator="currentIndicator"
-        @change:indicator="handleChangeIndicator"
-      />
+      <v-indicators-select width="250px" />
       <v-map-legend />
     </div>
 

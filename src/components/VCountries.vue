@@ -6,7 +6,7 @@
 
   <Dialog
     class="countries-dialog p-dialog-maximized"
-    :header="`${$filters.capitalize(currentIndicator)} by Country`"
+    :header="`${currentIndicator.label} by Country`"
     v-model:visible="isMaximize"
   >
     <v-countries-card :is-dialog="isMaximize" />

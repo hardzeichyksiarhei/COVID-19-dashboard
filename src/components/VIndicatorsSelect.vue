@@ -1,7 +1,7 @@
 <template>
   <div class="indicators-select">
     <Dropdown
-      class="indicators-btn"
+      class="indicators-dropdown"
       :style="{ width: width || 'auto' }"
       :modelValue="currentIndicator"
       :options="indicators"
@@ -49,5 +49,20 @@ export default {
 <style lang="scss" scoped>
 ::v-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
   padding: 0.5rem 1rem;
+}
+
+::v-deep .p-dropdown-items-wrapper {
+  &::-webkit-scrollbar {
+    width: 6px;
+    margin: 0 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: var(--surface-d);
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+  }
 }
 </style>
