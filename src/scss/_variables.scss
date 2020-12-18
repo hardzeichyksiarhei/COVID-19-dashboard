@@ -1,10 +1,10 @@
 $primary-color: #e53935;
 $accent-color:  #fb8c00;
 
-$cases-color: red;
-$deaths-color: maroon;
-$recovered-color: green;
-$tests-color: teal;
+$cases-color: #C62828;
+$deaths-color: #EF6C00;
+$recovered-color: #2E7D32;
+$tests-color: #00695C;
 
 :root {
     --primary-color: #{$primary-color};

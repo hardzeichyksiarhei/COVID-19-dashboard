@@ -2,8 +2,7 @@
   <div class="dashboard">
     <div class="dashboard-grid">
       <div class="dashboard-grid-col">
-        <v-global-cases-card />
-        <v-countries-card />
+        <v-countries />
       </div>
       <div class="dashboard-grid-col">
         <v-map />
@@ -19,13 +18,12 @@
 </template>
 
 <script>
-import VCountriesCard from "../components/cards/VCountriesCard";
-import VGlobalCasesCard from "../components/cards/VGlobalCasesCard";
+import VCountries from "../components/VCountries.vue";
 import VMap from "../components/VMap.vue";
 
 export default {
   name: "Dashboard",
-  components: { VCountriesCard, VGlobalCasesCard, VMap },
+  components: { VCountries, VMap },
 };
 </script>
 

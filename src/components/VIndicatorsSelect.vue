@@ -2,6 +2,7 @@
   <div class="indicators-select">
     <Dropdown
       class="indicators-btn"
+      :style="{ width: width || 'auto' }"
       v-model="localCurrentIndicator"
       :options="indicators"
       optionLabel="label"
@@ -17,7 +18,7 @@ import Dropdown from "primevue/dropdown";
 export default {
   name: "VIndicatorsSelect",
 
-  props: ["currentIndicator"],
+  props: ["currentIndicator", "width"],
 
   components: {
     Dropdown,

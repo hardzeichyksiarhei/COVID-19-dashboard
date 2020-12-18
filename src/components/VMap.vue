@@ -213,7 +213,8 @@ export default {
   height: calc(100vh - 152px);
 }
 
-::v-deep .leaflet-top {
+::v-deep .leaflet-top,
+::v-deep .leaflet-bottom {
   z-index: 100;
 }
 

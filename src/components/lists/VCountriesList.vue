@@ -6,7 +6,6 @@
     :options="countries"
     :filter="true"
     optionLabel="country"
-    :listStyle="`height: ${height}`"
   >
     <template #option="slotProps">
       <div class="country-item">
@@ -17,8 +16,8 @@
         />
         <span class="country-item__label">
           {{ slotProps.option.country }}
-          <span class="country-item__cases">
-            ({{ $filters.numberFormat(slotProps.option.cases) }})
+          <span :class="`country-item__number ${currentIndicator}`">
+            ({{ $filters.numberFormat(slotProps.option[currentIndicator]) }})
           </span>
         </span>
       </div>
@@ -36,7 +35,7 @@ export default {
 
   components: { Listbox },
 
-  props: ["countries", "height"],
+  props: ["countries", "currentIndicator"],
 
   data() {
     return {
@@ -56,5 +55,58 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+.countries-list {
+  .p-listbox-list-wrapper {
+    &::-webkit-scrollbar {
+      width: 6px;
+      margin: 0 10px;
+    }
+    &::-webkit-scrollbar-track {
+      background: var(--surface-d);
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 4px;
+    }
+
+    .p-listbox-list {
+      height: calc(65vh + 10px);
+      .p-listbox-item {
+        &.p-highlight {
+          color: var(--primary-color);
+          background: rgba($primary-color, 0.05);
+        }
+      }
+    }
+  }
+}
+
+.country-item {
+  display: flex;
+  align-items: center;
+  &__flag {
+    width: 36px;
+    height: auto;
+    margin-right: 10px;
+  }
+  &__number {
+    color: $primary-color;
+    font-size: 14px;
+    font-weight: bold;
+    &.cases {
+      color: $cases-color;
+    }
+    &.deaths {
+      color: $deaths-color;
+    }
+    &.recovered {
+      color: $recovered-color;
+    }
+    &.tests {
+      color: $tests-color;
+    }
+  }
+}
 </style>

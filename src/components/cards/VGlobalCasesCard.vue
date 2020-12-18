@@ -1,12 +1,16 @@
 <template>
   <div class="global-cases-card">
-    <div class="global-cases-card__title">
+    <div class="global-cases-card__label">
       {{
-        currentCountry ? `Cases by: ${currentCountry.country}` : "Global Cases"
+        currentCountry
+          ? `${$filters.capitalize(currentIndicator)} by: ${
+              currentCountry.country
+            }`
+          : `Global ${$filters.capitalize(currentIndicator)}`
       }}
     </div>
-    <div class="global-cases-card__content">
-      {{ $filters.numberFormat(globalCases) }}
+    <div :class="`global-cases-card__number ${currentIndicator}`">
+      {{ $filters.numberFormat(global[currentIndicator]) }}
     </div>
   </div>
 </template>
@@ -17,14 +21,17 @@ import { mapGetters } from "vuex";
 export default {
   name: "VGlobalCasesCard",
 
+  props: ["currentIndicator"],
+
   computed: {
     ...mapGetters({
       covidAll: "app/covidAll",
       currentCountry: "countries/currentCountry",
     }),
 
-    globalCases() {
-      return this.currentCountry?.cases || this.covidAll?.cases;
+    global() {
+      if (!this.currentCountry && !this.covidAll) return {};
+      return this.currentCountry || this.covidAll;
     },
   },
 };
@@ -41,13 +48,24 @@ export default {
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   margin-bottom: 20px;
-  &__title {
+  &__label {
     font-size: 20px;
     margin-bottom: 5px;
   }
-  &__content {
-    color: $primary-color;
+  &__number {
     font-size: 32px;
+    &.cases {
+      color: $cases-color;
+    }
+    &.deaths {
+      color: $deaths-color;
+    }
+    &.recovered {
+      color: $recovered-color;
+    }
+    &.tests {
+      color: $tests-color;
+    }
   }
 }
 </style>
