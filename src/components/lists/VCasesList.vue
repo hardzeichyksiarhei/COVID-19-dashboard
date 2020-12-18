@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="card">
-        <DataTable :value="countries" :scrollable="true" scrollHeight="40vh">
+        <DataTable :value="tableData" :scrollable="true" scrollHeight="40vh">
             <Column field="country" header="Country"></Column>
             <Column field="cases" header="Cases"></Column>
             <Column field="deaths" header="Deaths"></Column>
@@ -21,44 +21,25 @@
 
 <script>
 
-// import Listbox from "primevue/listbox";
 import DataTable from 'primevue/datatable';
 import Card from 'primevue/card';
 import Column from 'primevue/column';
-// import ColumnGroup from 'primevue/columngroup'; 
-// import Dropdown from 'primevue/dropdown';
+import Dropdown from 'primevue/dropdown';
 
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "VCasesList",
 
-  components: { Card, DataTable, Column },
+  components: { Card, DataTable, Column, Dropdown },
 
   props: ["countries", "height"],
 
-   data() {
+  data() {
     return {
-      // allcountries: null,
-      selectedCountry: null,
       // selectedIndicator: null,
-      // indicators: [
-      //   {name: 'Deaths', code: 'deaths'},
-      //   {name: 'Cases', code: 'cases'},
-      //   {name: 'Recovered', code: 'recovered'},
-      // ]
+      selectedCountry: null,
     };
-  },
-
-
-  methods: {
-    ...mapActions({
-      setCurrentIndicator: "countries/setCurrentIndicator",
-    }),
-
-    handleChangeIndicator({ value }) {
-      this.setCurrentIndicator(value.code);
-    },
   },
 
   computed: {
@@ -70,6 +51,10 @@ export default {
 
     tableTitle(){
       return this.currentCountry ? `${this.currentIndicator[0].toUpperCase() + this.currentIndicator.slice(1)} in ${this.currentCountry.country}` : `Global ${this.currentIndicator}`;
+    },
+
+    tableData(){
+      return this.currentCountry ? [this.currentCountry] : this.countries
     },
 
     globalCases() {
