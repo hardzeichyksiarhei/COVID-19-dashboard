@@ -3,7 +3,7 @@
     <Dropdown
       class="indicators-btn"
       :style="{ width: width || 'auto' }"
-      v-model="localCurrentIndicator"
+      :modelValue="currentIndicator"
       :options="indicators"
       optionLabel="label"
       @change="handleChangeIndicator"
@@ -13,30 +13,33 @@
 
 <script>
 import Dropdown from "primevue/dropdown";
-
-import { indicators } from "../helpers/indicators";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "VIndicatorsSelect",
 
-  props: ["currentIndicator", "width"],
+  props: ["width"],
 
-  components: {
-    Dropdown,
-  },
+  components: { Dropdown },
 
-  data() {
-    return {
-      localCurrentIndicator: this.currentIndicator,
-      indicators,
-    };
+  computed: {
+    ...mapGetters({
+      currentIndicator: "countries/currentIndicator",
+      indicators: "countries/indicators",
+    }),
   },
 
   methods: {
+    ...mapActions({
+      setCurrentIndicator: "countries/setCurrentIndicator",
+    }),
     handleChangeIndicator({ value }) {
       const indicator = this.indicators.find(
         (indicator) => indicator.key === value.key
       );
+
+      this.setCurrentIndicator(indicator);
+
       this.$emit("change:indicator", indicator);
     },
   },

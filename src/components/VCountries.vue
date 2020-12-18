@@ -1,11 +1,7 @@
 <template>
   <div class="countries">
-    <v-global-cases-card :current-indicator="currentIndicator" />
-    <v-countries-card
-      :current-indicator="currentIndicator"
-      @change:indicator="handleChangeIndicator"
-      @dialog:show="isMaximize = true"
-    />
+    <v-global-cases-card />
+    <v-countries-card @dialog:show="isMaximize = true" />
   </div>
 
   <Dialog
@@ -13,11 +9,7 @@
     :header="`${$filters.capitalize(currentIndicator)} by Country`"
     v-model:visible="isMaximize"
   >
-    <v-countries-card
-      :is-dialog="isMaximize"
-      :current-indicator="currentIndicator"
-      @change:indicator="handleChangeIndicator"
-    />
+    <v-countries-card :is-dialog="isMaximize" />
   </Dialog>
 </template>
 
@@ -26,8 +18,7 @@ import Dialog from "primevue/dialog";
 
 import VCountriesCard from "../components/cards/VCountriesCard";
 import VGlobalCasesCard from "../components/cards/VGlobalCasesCard";
-
-import { indicators } from "../helpers/indicators";
+import { mapGetters } from "vuex";
 
 export default {
   name: "VCountries",
@@ -37,8 +28,13 @@ export default {
   data() {
     return {
       isMaximize: false,
-      currentIndicator: indicators[0],
     };
+  },
+
+  computed: {
+    ...mapGetters({
+      currentIndicator: "countries/currentIndicator",
+    }),
   },
 
   methods: {

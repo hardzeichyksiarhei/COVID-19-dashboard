@@ -74,8 +74,6 @@ import "leaflet/dist/leaflet.css";
 import VIndicatorsSelect from "../VIndicatorsSelect";
 import VMapLegend from "../VMapLegend.vue";
 
-import { indicators } from "../../helpers/indicators";
-
 const FILL_COLOR = {
   cases: "var(--cases-color)",
   deaths: "var(--deaths-color)",
@@ -98,7 +96,6 @@ export default {
   data() {
     return {
       FILL_COLOR,
-      currentIndicator: indicators[0],
 
       tileLayerURL:
         "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
@@ -111,6 +108,7 @@ export default {
     ...mapGetters({
       countries: "countries/countries",
       currentCountry: "countries/currentCountry",
+      currentIndicator: "countries/currentIndicator",
     }),
 
     locations() {

@@ -19,12 +19,11 @@ import { mapGetters } from "vuex";
 export default {
   name: "VGlobalCasesCard",
 
-  props: ["currentIndicator"],
-
   computed: {
     ...mapGetters({
       covidAll: "app/covidAll",
       currentCountry: "countries/currentCountry",
+      currentIndicator: "countries/currentIndicator",
     }),
 
     global() {

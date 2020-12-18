@@ -36,11 +36,12 @@ export default {
 
   components: { Listbox },
 
-  props: ["countries", "currentIndicator"],
+  props: ["countries"],
 
   computed: {
     ...mapGetters({
       currentCountry: "countries/currentCountry",
+      currentIndicator: "countries/currentIndicator",
     }),
     localCountries() {
       const countries = [...this.countries];

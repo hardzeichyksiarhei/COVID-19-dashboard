@@ -5,16 +5,9 @@
     </button>
 
     <div class="countries-card__indicator-select">
-      <v-indicators-select
-        :current-indicator="localCurrentIndicator"
-        @change:indicator="handleChangeIndicator"
-        width="100%"
-      />
+      <v-indicators-select width="100%" />
     </div>
-    <v-countries-list
-      :countries="countries"
-      :current-indicator="localCurrentIndicator"
-    />
+    <v-countries-list :countries="countries" />
   </div>
 </template>
 
@@ -30,7 +23,7 @@ export default {
 
   components: { VCountriesList, VIndicatorsSelect },
 
-  props: ["currentIndicator", "isDialog"],
+  props: ["isDialog"],
 
   setup(props, { emit }) {
     const { currentIndicator } = toRefs(props);
