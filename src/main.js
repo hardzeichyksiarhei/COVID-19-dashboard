@@ -27,11 +27,18 @@ app.mount("#app");
 
 /* Global Filters */
 const NumberFormat = new Intl.NumberFormat("ru");
+const DateFormat = new Intl.DateTimeFormat("ru", {
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  hour12: false,
+});
 
 app.config.globalProperties.$filters = {
-  numberFormat(value) {
-    return NumberFormat.format(value);
-  },
+  numberFormat: (value) => NumberFormat.format(value),
+  dateFormat: (value) => DateFormat.format(new Date(value)),
   capitalize(value) {
     if (!value) return "";
     value = value.toString();

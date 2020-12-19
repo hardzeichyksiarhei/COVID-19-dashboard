@@ -66,6 +66,7 @@ export default {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     padding: 1rem;
+    padding-top: 13px;
     padding-bottom: 0;
   }
 
@@ -78,7 +79,7 @@ export default {
 
 .countries-card {
   ::v-deep .countries-list .p-listbox-list-wrapper .p-listbox-list {
-    height: calc(65vh + 10px);
+    height: calc(100vh - 382px);
   }
 }
 

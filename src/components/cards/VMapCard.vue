@@ -24,6 +24,7 @@
           [-90, -180],
           [90, 180],
         ]"
+        :zoomAnimation="true"
         @update:zoom="zoomUpdated"
         @update:center="centerUpdated"
         @ready="mapReady"
@@ -193,9 +194,12 @@ export default {
 
 <style lang="scss" scoped>
 .map-card {
+  display: flex;
+  flex-direction: column;
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
+  height: calc(100vh - 150px);
   &:hover {
     .maximize-btn {
       opacity: 1;
@@ -213,27 +217,31 @@ export default {
 
 .map-card-selects {
   display: grid;
-  grid-template-columns: 200px 200px;
+  grid-template-columns: 180px 180px;
   gap: 10px;
 }
 
 #map {
   width: 100%;
-  height: calc(100vh - 152px);
+  flex-grow: 1;
 }
 
 .map-card.is-dialog #map {
   height: 80vh;
 }
 
+::v-deep .leaflet-container {
+  background: var(--surface-b);
+}
+
 ::v-deep .leaflet-top,
 ::v-deep .leaflet-bottom {
-  z-index: 100;
+  z-index: 999;
 }
 
 ::v-deep .leaflet-tooltip {
   min-width: 160px;
-  background-color: var(--surface-a);
+  background-color: #222;
   color: #fff;
   border-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.3);

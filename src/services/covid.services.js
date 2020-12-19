@@ -29,6 +29,7 @@ const getAll = async () => {
         (global.todayRecovered / global.population) * 1000000
       ),
     },
+    updated: global.updated,
   };
 };
 
