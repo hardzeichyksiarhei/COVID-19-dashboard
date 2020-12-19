@@ -10,7 +10,7 @@
     header="Cases by Country"
     v-model:visible="isMaximize"
   >
-    <v-cases-list :countries="countries" :height="'calc(80vh - 10px)'" />
+    <v-cases-list :countries="countries" :height="'calc(65vh - 10px)'" />
   </Dialog>
 </template>
 

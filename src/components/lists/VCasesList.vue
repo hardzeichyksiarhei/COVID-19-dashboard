@@ -2,7 +2,7 @@
   <Card>
     <template #content>
       <v-indicators-select width="100%" />
-      <div class="global-cases-card">
+      <!-- <div class="global-cases-card">
         <div class="global-cases-card__title">
           {{
             currentCountry
@@ -13,9 +13,9 @@
         <div :class="`global-cases-card__content ${currentIndicator.color}`">
           {{ $filters.numberFormat(globalIndicator) }}
         </div>
-      </div>
+      </div> -->
       <div class="indicators-table-card">
-        <DataTable :value="tableCountry" :scrollable="true" scrollHeight="40vh">
+        <DataTable :value="tableCountry" :scrollable="true" :scrollHeight="height">
           <Column field="country" header="Country"></Column>
           <Column
             :field="tableIndicator"
