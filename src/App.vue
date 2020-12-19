@@ -19,7 +19,7 @@
           hardz
         </a>
         and
-        <a href="#" target="_blank">nastyaklezovich</a>
+        <a href="https://github.com/nastyaklezovich" target="_blank">nastyaklezovich</a>
         for
         <a href="https://rs.school/" target="_blank">RS School</a>
       </div>
