@@ -44,7 +44,11 @@ export default {
 
 <style lang="scss">
 .coutries-card {
+  height: 50vh;
   position: relative;
+  background: var(--surface-a);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
   &:hover {
     .maximize-btn {
       opacity: 1;
