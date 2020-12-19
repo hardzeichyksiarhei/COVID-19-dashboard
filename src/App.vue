@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="app">
     <div class="app-toolbar">
-      <div class="app-toolbar__logo">COVID-19 Dashboard</div>
+      <div class="app-toolbar__logo"><b>COVID-19</b> Dashboard</div>
       <div class="app-toolbar__updated" v-if="covidAll">
         <span>Last Updated At:</span>
         {{ $filters.dateFormat(covidAll.updated) }}
@@ -12,7 +12,18 @@
       <router-view />
     </div>
 
-    <div class="app-footer">COVID-19 Footer</div>
+    <div class="app-footer">
+      <div class="app-footer__copyright">
+        © {{ new Date().getFullYear() }} Developed by
+        <a href="https://github.com/hardzeichyksiarhei" target="_blank">
+          hardz
+        </a>
+        and
+        <a href="#" target="_blank">nastyaklezovich</a>
+        for
+        <a href="https://rs.school/" target="_blank">RS School</a>
+      </div>
+    </div>
   </div>
 </template>
 

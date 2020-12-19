@@ -19,6 +19,15 @@ html, body {
     box-sizing: border-box;
 }
 
+a {
+    color: #fff;
+    transition: .25s color ease;
+    &:hover {
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+}
+
 .app {
     display: flex;
     flex-direction: column;
@@ -36,7 +45,7 @@ html, body {
     padding: 15px;
     &__updated {
         span {
-            opacity: 0.5;
+            color: var(--text-color);
         }
     }
 }
@@ -55,6 +64,9 @@ html, body {
     background-color: var(--surface-a);
     border-top: 1px solid var(--surface-d);
     padding: 15px;
+    &__copyright {
+        color: var(--text-color);
+    }
 }
 
 .maximize-btn {
