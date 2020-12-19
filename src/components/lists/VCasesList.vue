@@ -1,26 +1,28 @@
 <template>
   <Card>
     <template #content>
-      <v-indicators-select width="100%" />
-      <!-- <div class="global-cases-card">
-        <div class="global-cases-card__title">
-          {{
-            currentCountry
-              ? `${currentIndicator.label} by: ${currentCountry.country}`
-              : `Global ${currentIndicator.label}`
-          }}
-        </div>
-        <div :class="`global-cases-card__content ${currentIndicator.color}`">
-          {{ $filters.numberFormat(globalIndicator) }}
-        </div>
-      </div> -->
+      <v-indicators-types-select width="100%" />
       <div class="indicators-table-card">
         <DataTable :value="tableCountry" :scrollable="true" :scrollHeight="height">
-          <Column field="country" header="Country"></Column>
+          <Column 
+            field="name" 
+            header="Country"  
+            bodyClass="indicators-table-card__content country"
+          ></Column>
           <Column
-            :field="tableIndicator"
-            :header="tableTitle"
-            :bodyClass="`indicators-table-card__content ${currentIndicator.color}`"
+            :field="`${this.currentIndicatorType.key}.cases`"
+            header="Cases"
+            bodyClass="indicators-table-card__content cases"
+          ></Column>
+          <Column
+            :field="`${this.currentIndicatorType.key}.deaths`"
+            header="Deaths"
+            bodyClass="indicators-table-card__content deaths"
+          ></Column>
+          <Column
+            :field="`${this.currentIndicatorType.key}.recovered`"
+            header="Recovered"
+            bodyClass="indicators-table-card__content recovered"
           ></Column>
         </DataTable>
       </div>
@@ -32,31 +34,30 @@
 import DataTable from "primevue/datatable";
 import Card from "primevue/card";
 import Column from "primevue/column";
-// import Dropdown from 'primevue/dropdown';
-import VIndicatorsSelect from "../VIndicatorsSelect.vue";
+import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
 
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "VCasesList",
 
-  components: { Card, DataTable, Column, VIndicatorsSelect },
+  components: { Card, DataTable, Column, VIndicatorsTypesSelect },
 
   props: ["countries", "height"],
 
   data() {
     return {
-      indicator: this.currentIndicator,
+      indicatorType: this.currentIndicatorType,
     };
   },
 
   methods: {
     ...mapActions({
-      setCurrentIndicator: "countries/setCurrentIndicator",
+      setCurrentIndicatorType: "countries/setCurrentIndicatorType",
     }),
 
-    handleChangeIndicator({ value }) {
-      this.setCurrentIndicator(value);
+    handleChangeIndicatorType({ value }) {
+      this.setCurrentIndicatorType(value);
     },
   },
 
@@ -64,27 +65,12 @@ export default {
     ...mapGetters({
       covidAll: "app/covidAll",
       currentCountry: "countries/currentCountry",
-      currentIndicator: "countries/currentIndicator",
+      currentIndicatorType: "countries/currentIndicatorType",
       indicators: "countries/indicators",
     }),
 
-    tableTitle() {
-      return this.currentIndicator.label;
-    },
-
     tableCountry() {
       return this.currentCountry ? [this.currentCountry] : this.countries;
-    },
-
-    tableIndicator() {
-      return this.currentIndicator.key;
-    },
-
-    globalIndicator() {
-      return (
-        this.currentCountry?.[this.currentIndicator.key] ||
-        this.covidAll?.[this.currentIndicator.key]
-      );
     },
   },
 };
@@ -108,7 +94,11 @@ export default {
 .indicators-table-card {
   &__content {
     color: $primary-color;
+    font-size: 14px;
     font-weight: 600;
+    &.country{
+      color: white;
+    }
     &.cases {
       color: $cases-color;
     }
@@ -124,35 +114,4 @@ export default {
   }
 }
 
-.global-cases-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 90px;
-  background: var(--surface-a);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-  margin-top: 16px;
-  &__title {
-    font-size: 20px;
-    margin-bottom: 5px;
-  }
-  &__content {
-    color: $primary-color;
-    font-size: 32px;
-    &.cases {
-      color: $cases-color;
-    }
-    &.deaths {
-      color: $deaths-color;
-    }
-    &.recovered {
-      color: $recovered-color;
-    }
-    &.tests {
-      color: $tests-color;
-    }
-  }
-}
 </style>
