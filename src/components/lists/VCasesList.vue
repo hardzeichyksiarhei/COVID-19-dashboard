@@ -78,6 +78,7 @@ export default {
 
 <style lang="scss">
 .p-datatable-scrollable-body {
+  overflow-y: auto !important;
   &::-webkit-scrollbar {
     width: 6px;
     margin: 0 10px;

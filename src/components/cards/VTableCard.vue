@@ -3,7 +3,7 @@
     <button class="maximize-btn" @click="isMaximize = true">
       <i class="pi pi-window-maximize"></i>
     </button>
-    <v-cases-list :countries="countries" :height="'30vh'" />
+    <v-cases-list :countries="countries" :height="'28vh'" />
   </div>
   <Dialog
     class="p-dialog-maximized"
