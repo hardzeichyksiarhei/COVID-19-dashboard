@@ -62,6 +62,11 @@
         </l-circle-marker>
       </l-map>
     </div>
+
+    <v-current-country-info-card
+      class="current-country-info"
+      v-if="currentCountry"
+    />
   </div>
 </template>
 
@@ -79,6 +84,7 @@ import "leaflet/dist/leaflet.css";
 import VIndicatorsSelect from "../VIndicatorsSelect";
 import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
 import VMapLegend from "../VMapLegend.vue";
+import VCurrentCountryInfoCard from "./VCurrentCountryInfoCard";
 
 const FILL_COLOR = {
   cases: "var(--cases-color)",
@@ -99,6 +105,7 @@ export default {
     VIndicatorsSelect,
     VIndicatorsTypesSelect,
     VMapLegend,
+    VCurrentCountryInfoCard,
   },
 
   data() {
@@ -153,9 +160,7 @@ export default {
 
     handleClickCircleMarker(countryId) {
       const country =
-        this.countries.find(
-          (country) => country.countryInfo._id === countryId
-        ) || null;
+        this.countries.find((country) => country.id === countryId) || null;
 
       this.setCurrentCountry(country);
     },
@@ -277,11 +282,13 @@ export default {
         color: $recovered-color;
       }
     }
-    &--tests {
-      span {
-        color: $tests-color;
-      }
-    }
   }
+}
+
+.current-country-info {
+  position: absolute;
+  z-index: 999;
+  bottom: 20px;
+  left: 20px;
 }
 </style>

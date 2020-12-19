@@ -28,6 +28,26 @@ a {
     }
 }
 
+.cases-text {
+      color: $cases-color;
+    
+  }
+  .deaths-text {
+
+      color: $deaths-color;
+    
+  }
+  .recovered-text {
+  
+      color: $recovered-color;
+    
+  }
+  .tests-text {
+
+      color: $tests-color;
+    
+  }
+
 .app {
     display: flex;
     flex-direction: column;
