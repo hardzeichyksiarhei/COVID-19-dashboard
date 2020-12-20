@@ -88,7 +88,7 @@ export default {
   }
 }
 .indicators-table-card {
-  height: 35vh;
+  height: 366px;
   margin-top: 15px;
   &.is-dialog {
     height: 80vh;

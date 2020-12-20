@@ -1,16 +1,16 @@
 <template>
-    <div class="chart-card" :class="{ 'is-dialog': isDialog }">
-        <button v-if="!isDialog" class="maximize-btn" @click="$emit('dialog:show')">
-            <i class="pi pi-window-maximize"></i>
-        </button>   
+  <div class="chart-card" :class="{ 'is-dialog': isDialog }">
+    <button v-if="!isDialog" class="maximize-btn" @click="$emit('dialog:show')">
+      <i class="pi pi-window-maximize"></i>
+    </button>
 
-        <div class="chart-card__indicator-select">
-            <v-indicators-select width="100%" />
-        </div>
-        <div v-if="countries" class="chart-card__chart" >
-          <Chart type="bar" :data="basicData" :options="options"/>
-        </div>
+    <div class="chart-card__indicator-select">
+      <v-indicators-select width="100%" />
     </div>
+    <div v-if="countries" class="chart-card__chart">
+      <Chart type="bar" :data="basicData" :options="options" />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -40,11 +40,13 @@ export default {
       countries: null,
       options: {
         scales: {
-            xAxes: [{
-                display: false,
-            }]
-        }
-    },
+          xAxes: [
+            {
+              display: false,
+            },
+          ],
+        },
+      },
     };
   },
 
@@ -84,14 +86,13 @@ export default {
   async created() {
     this.countries = await covidService.getHistoricalAll();
   },
-
 };
 </script>
 
 <style lang="scss" scoped>
 .chart-card {
   margin-top: 1rem;
-  height: 30vh;
+  height: calc(100vh - 615px);
   position: relative;
   background: var(--surface-a);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -107,15 +108,13 @@ export default {
     padding-top: 13px;
     padding-bottom: 13px;
   }
-}
 
-.chart-card {
-    height: 30vh;
+  &__chart {
+    padding: 15px;
+  }
 }
 
 .chart-card.is-dialog {
-    height: 30vh;
+  height: 30vh;
 }
-
-
 </style>
