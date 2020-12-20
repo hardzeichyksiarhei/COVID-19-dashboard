@@ -1,4 +1,9 @@
 <template>
+  <transition name="fade">
+    <div class="app-loading" v-if="isCountriesLoading">
+      <span>Loading...</span>
+    </div>
+  </transition>
   <div id="app" class="app">
     <div class="app-toolbar">
       <div class="app-toolbar__logo"><b>COVID-19</b> Dashboard</div>
@@ -19,7 +24,9 @@
           hardz
         </a>
         and
-        <a href="https://github.com/nastyaklezovich" target="_blank">nastyaklezovich</a>
+        <a href="https://github.com/nastyaklezovich" target="_blank"
+          >nastyaklezovich</a
+        >
         for
         <a href="https://rs.school/" target="_blank">RS School</a>
       </div>
@@ -29,6 +36,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
   name: "App",
 
@@ -39,6 +47,7 @@ export default {
   computed: {
     ...mapGetters({
       covidAll: "app/covidAll",
+      isCountriesLoading: "countries/isCountriesLoading",
     }),
   },
 };
