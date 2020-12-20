@@ -30,6 +30,7 @@ export default {
   display: flex;
   align-items: center;
   list-style-type: none;
+  padding: 0;
 }
 
 .map-card-legend-item {
