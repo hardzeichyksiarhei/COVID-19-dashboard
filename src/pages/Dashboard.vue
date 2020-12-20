@@ -21,7 +21,7 @@ import { useStore } from "vuex";
 import VTableCard from "../components/cards/VTableCard";
 import VMap from "../components/VMap.vue";
 import VCountries from "../components/VCountries.vue";
-import VChart from "../components/VChart.vue"
+import VChart from "../components/VChart.vue";
 
 export default {
   name: "Dashboard",
@@ -38,7 +38,7 @@ export default {
 <style lang="scss" scoped>
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 320px 2fr 1fr;
+  grid-template-columns: 320px minmax(auto, 1fr) minmax(auto, 400px);
   gap: 20px;
 }
 </style>
