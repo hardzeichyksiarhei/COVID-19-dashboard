@@ -21,7 +21,7 @@ import { useStore } from "vuex";
 import VTableCard from "../components/cards/VTableCard";
 import VMap from "../components/VMap.vue";
 import VCountries from "../components/VCountries.vue";
-import VChart from "../components/cards/VChart"
+import VChart from "../components/VChart.vue"
 
 export default {
   name: "Dashboard",

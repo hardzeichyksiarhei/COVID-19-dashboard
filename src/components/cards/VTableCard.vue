@@ -1,5 +1,5 @@
 <template>
-  <div class="coutries-card">
+  <div class="table-card">
     <button class="maximize-btn" @click="isMaximize = true">
       <i class="pi pi-window-maximize"></i>
     </button>
@@ -34,16 +34,13 @@ export default {
 
     const countries = computed(() => store.getters["countries/countries"]);
 
-    // Deprecated: Moved to Dashboard component
-    // store.dispatch("countries/fetchCountries");
-
     return { isMaximize, countries };
   },
 };
 </script>
 
 <style lang="scss">
-.coutries-card {
+.table-card {
   position: relative;
   background: var(--surface-a);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -96,4 +93,5 @@ export default {
     font-weight: bold;
   }
 }
+
 </style>
