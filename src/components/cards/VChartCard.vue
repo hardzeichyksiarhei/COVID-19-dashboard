@@ -5,7 +5,10 @@
     </button>
 
     <div class="chart-card__indicator-select">
-      <v-indicators-select width="100%" />
+      <v-indicators-select
+        width="100%"
+        @change:indicator="handleChangeIndicator"
+      />
     </div>
     <div v-if="historicalAll" class="chart-card__chart">
       <Chart type="bar" :data="basicData" :options="options" />
@@ -14,8 +17,6 @@
 </template>
 
 <script>
-import { toRefs } from "vue";
-
 import Chart from "primevue/chart";
 import { mapGetters } from "vuex";
 import VIndicatorsSelect from "../VIndicatorsSelect";
@@ -48,21 +49,6 @@ export default {
     };
   },
 
-  setup(props, { emit }) {
-    const { currentIndicator } = toRefs(props);
-    let localCurrentIndicator = currentIndicator;
-
-    const handleChangeIndicator = (indicator) => {
-      localCurrentIndicator = indicator;
-      emit("change:indicator", indicator);
-    };
-
-    return {
-      localCurrentIndicator,
-      handleChangeIndicator,
-    };
-  },
-
   computed: {
     ...mapGetters({
       covidAll: "app/covidAll",
@@ -84,6 +70,12 @@ export default {
           },
         ],
       };
+    },
+  },
+
+  methods: {
+    handleChangeIndicator(indicator) {
+      console.log(indicator);
     },
   },
 };
