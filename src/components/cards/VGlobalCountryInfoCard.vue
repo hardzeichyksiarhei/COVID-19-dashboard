@@ -9,7 +9,7 @@
     </div>
     <div
       v-if="globalNumber"
-      :class="`global-country-info-card__number ${currentIndicator.color}`"
+      :class="`global-country-info-card__number ${currentIndicator.color}-text`"
     >
       {{ globalNumber }}
     </div>
@@ -17,29 +17,45 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { computed } from "vue";
+import { useStore } from "vuex";
+
+import { numberFormat } from "../../services/formats.services";
 
 export default {
   name: "VGlobalCountryInfoCard",
 
-  computed: {
-    ...mapGetters({
-      covidAll: "app/covidAll",
-      currentCountry: "countries/currentCountry",
-      currentIndicator: "countries/currentIndicator",
-      currentIndicatorType: "countries/currentIndicatorType",
-    }),
+  setup() {
+    const store = useStore();
 
-    globalNumber() {
-      const obj = this.currentCountry || this.covidAll;
-      if (obj) {
-        return this.$filters.numberFormat(
-          obj[this.currentIndicatorType.key][this.currentIndicator.key]
-        );
-      }
+    const covidAll = computed(() => store.getters["app/covidAll"]);
 
-      return false;
-    },
+    const currentCountry = computed(
+      () => store.getters["countries/currentCountry"]
+    );
+    const currentIndicator = computed(
+      () => store.getters["countries/currentIndicator"]
+    );
+    const currentIndicatorType = computed(
+      () => store.getters["countries/currentIndicatorType"]
+    );
+
+    const globalNumber = computed(() => {
+      const data = currentCountry.value || covidAll.value;
+      if (!data) return false;
+
+      return numberFormat(
+        data[currentIndicatorType.value.key][currentIndicator.value.key]
+      );
+    });
+
+    return {
+      covidAll,
+      currentCountry,
+      currentIndicator,
+      currentIndicatorType,
+      globalNumber,
+    };
   },
 };
 </script>
@@ -61,18 +77,6 @@ export default {
   }
   &__number {
     font-size: 32px;
-    &.cases {
-      color: $cases-color;
-    }
-    &.deaths {
-      color: $deaths-color;
-    }
-    &.recovered {
-      color: $recovered-color;
-    }
-    &.tests {
-      color: $tests-color;
-    }
   }
 }
 </style>
