@@ -1,7 +1,7 @@
 <template>
   <v-indicators-types-select width="100%" />
-  <div class="indicators-table-card">
-    <DataTable :value="tableCountry" :scrollable="true" :scrollHeight="height">
+  <div class="indicators-table-card" :class="{ 'is-dialog': isDialog }">
+    <DataTable :value="tableCountry" :scrollable="true" scrollHeight="flex">
       <Column
         field="name"
         header="Country"
@@ -38,7 +38,7 @@ export default {
 
   components: { DataTable, Column, VIndicatorsTypesSelect },
 
-  props: ["countries", "height"],
+  props: ["countries", "isDialog"],
 
   data() {
     return {
@@ -88,7 +88,11 @@ export default {
   }
 }
 .indicators-table-card {
+  height: 35vh;
   margin-top: 15px;
+  &.is-dialog {
+    height: 80vh;
+  }
   &__content {
     color: $primary-color;
     font-size: 14px;

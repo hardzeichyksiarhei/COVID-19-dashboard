@@ -159,7 +159,11 @@ export default {
       const country =
         this.countries.find((country) => country.id === countryId) || null;
 
-      this.setCurrentCountry(country);
+      if (!this.currentCountry || this.currentCountry.id !== country.id) {
+        this.setCurrentCountry(country);
+      } else {
+        this.setCurrentCountry(null);
+      }
     },
 
     handleReadyMap() {

@@ -3,14 +3,14 @@
     <button class="maximize-btn" @click="isMaximize = true">
       <i class="pi pi-window-maximize"></i>
     </button>
-    <v-cases-list :countries="countries" :height="'35vh'" />
+    <v-cases-list :countries="countries" />
   </div>
   <Dialog
     class="p-dialog-maximized"
     header="Cases by Country"
     v-model:visible="isMaximize"
   >
-    <v-cases-list :countries="countries" height="75vh" />
+    <v-cases-list :is-dialog="isMaximize" :countries="countries" />
   </Dialog>
 </template>
 
