@@ -8,7 +8,7 @@
         <v-map />
       </div>
       <div class="dashboard-grid-col">
-        <v-table-card />
+        <v-table />
         <v-chart />
       </div>
     </div>
@@ -18,14 +18,14 @@
 <script>
 import { useStore } from "vuex";
 
-import VTableCard from "../components/cards/VTableCard";
+import VTable from "../components/VTable.vue";
 import VMap from "../components/VMap.vue";
 import VCountries from "../components/VCountries.vue";
 import VChart from "../components/VChart.vue";
 
 export default {
   name: "Dashboard",
-  components: { VCountries, VTableCard, VMap, VChart },
+  components: { VCountries, VTable, VMap, VChart },
 
   setup() {
     const store = useStore();

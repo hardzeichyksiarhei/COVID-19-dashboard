@@ -1,45 +1,48 @@
 <template>
-  <div class="table-card">
-    <button class="maximize-btn" @click="isMaximize = true">
+  <div class="table-card" :class="{ 'is-dialog': isDialog }">
+    <button v-if="!isDialog" class="maximize-btn" @click="$emit('dialog:show')">
       <i class="pi pi-window-maximize"></i>
     </button>
+    <div class="table-card__indicator-select">
+        <v-indicators-types-select width="100%" />
+    </div>
     <v-cases-list :countries="countries" />
   </div>
-  <Dialog
-    class="p-dialog-maximized"
-    header="Cases by Country"
-    v-model:visible="isMaximize"
-  >
-    <v-cases-list :is-dialog="isMaximize" :countries="countries" />
-  </Dialog>
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { toRefs, computed } from "vue";
 import { useStore } from "vuex";
 
-import Dialog from "primevue/dialog";
-
 import VCasesList from "../lists/VCasesList";
+import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
 
 export default {
   name: "VTableCard",
 
-  components: { Dialog, VCasesList },
+  components: { VCasesList, VIndicatorsTypesSelect },
 
-  setup() {
+  props: ["isDialog"],
+
+  setup(props, { emit }) {
+    const { currentIndicatorType } = toRefs(props);
+    let localCurrentIndicatorType = currentIndicatorType;
+
     const store = useStore();
-
-    const isMaximize = ref(false);
 
     const countries = computed(() => store.getters["countries/countries"]);
 
-    return { isMaximize, countries };
+    const handleChangeIndicatorType = (indicator) => {
+      localCurrentIndicatorType = indicator;
+      emit("change:indicator", indicator);
+    };
+
+    return { localCurrentIndicatorType, countries, handleChangeIndicatorType };
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .table-card {
   position: relative;
   background: var(--surface-a);
@@ -53,45 +56,11 @@ export default {
   }
 }
 
-.countries-list {
-  .p-listbox-list-wrapper {
-    &::-webkit-scrollbar {
-      width: 6px;
-      // margin: 0 10px;
-    }
-    &::-webkit-scrollbar-track {
-      background: var(--surface-d);
-      border-radius: 4px;
-    }
-    &::-webkit-scrollbar-thumb {
-      background: var(--primary-color);
-      border-radius: 4px;
-    }
-
-    .p-listbox-list {
-      .p-listbox-item {
-        &.p-highlight {
-          color: var(--primary-color);
-          background: rgba($primary-color, 0.05);
-        }
-      }
-    }
-  }
+.table-card {
+    height: calc(100vh - 382px);  
 }
 
-.country-item {
-  display: flex;
-  align-items: center;
-  &__flag {
-    width: 36px;
-    height: auto;
-    margin-right: 10px;
-  }
-  &__cases {
-    color: $primary-color;
-    font-size: 14px;
-    font-weight: bold;
-  }
+.table-card.is-dialog {
+    height: 75vh;   
 }
-
 </style>

@@ -1,7 +1,5 @@
 <template>
-  <v-indicators-types-select width="100%" />
-  <div class="indicators-table-card" :class="{ 'is-dialog': isDialog }">
-    <DataTable :value="tableCountry" :scrollable="true" scrollHeight="flex">
+    <DataTable class="countries-table" :value="tableCountry" :scrollable="true" scrollHeight="flex">
       <Column
         field="name"
         header="Country"
@@ -23,38 +21,20 @@
         bodyClass="indicators-table-card__content recovered"
       ></Column>
     </DataTable>
-  </div>
 </template>
 
 <script>
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
 
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "VCasesList",
 
-  components: { DataTable, Column, VIndicatorsTypesSelect },
+  components: { DataTable, Column },
 
-  props: ["countries", "isDialog"],
-
-  data() {
-    return {
-      indicatorType: this.currentIndicatorType,
-    };
-  },
-
-  methods: {
-    ...mapActions({
-      setCurrentIndicatorType: "countries/setCurrentIndicatorType",
-    }),
-
-    handleChangeIndicatorType({ value }) {
-      this.setCurrentIndicatorType(value);
-    },
-  },
+  props: ["countries"],
 
   computed: {
     ...mapGetters({
