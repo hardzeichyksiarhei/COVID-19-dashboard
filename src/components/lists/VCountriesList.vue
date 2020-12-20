@@ -4,7 +4,7 @@
     v-model="selectedCountry"
     :options="localCountries"
     :filter="true"
-    optionLabel="country"
+    optionLabel="name"
   >
     <template #option="slotProps">
       <div class="country-item">

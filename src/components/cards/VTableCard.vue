@@ -3,14 +3,14 @@
     <button class="maximize-btn" @click="isMaximize = true">
       <i class="pi pi-window-maximize"></i>
     </button>
-    <v-cases-list :countries="countries" :height="'28vh'" />
+    <v-cases-list :countries="countries" />
   </div>
   <Dialog
     class="p-dialog-maximized"
     header="Cases by Country"
     v-model:visible="isMaximize"
   >
-    <v-cases-list :countries="countries" :height="'calc(65vh - 10px)'" />
+    <v-cases-list :is-dialog="isMaximize" :countries="countries" />
   </Dialog>
 </template>
 
@@ -44,11 +44,11 @@ export default {
 
 <style lang="scss">
 .coutries-card {
-  height: 50vh;
   position: relative;
   background: var(--surface-a);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
+  padding: 15px;
   &:hover {
     .maximize-btn {
       opacity: 1;

@@ -20,26 +20,26 @@
         :center="center"
         :minZoom="2"
         :maxZoom="10"
-        :maxBounds="[
-          [-90, -180],
-          [90, 180],
-        ]"
         :zoomAnimation="true"
         @update:zoom="zoomUpdated"
         @update:center="centerUpdated"
-        @ready="mapReady"
+        @ready="handleReadyMap"
       >
         <l-tile-layer :url="tileLayerURL"></l-tile-layer>
+        <l-control position="bottomleft">
+          <div class="current-country-info">
+            <v-current-country-info-card v-if="currentCountry" />
+          </div>
+        </l-control>
+
         <l-circle-marker
           v-for="(location, idx) in locations"
           :key="idx"
           :lat-lng="[location.meta.lat, location.meta.long]"
-          :fillColor="
-            !location.current ? FILL_COLOR[currentIndicator.color] : 'purple'
-          "
-          :fillOpacity="!location.current ? 0.35 : 1"
+          :fillColor="FILL_COLOR[currentIndicator.color]"
+          :fillOpacity="location.current ? 1 : 0.4"
           :fill="true"
-          :color="location.current ? 'red' : 'transparent'"
+          color="white"
           :stroke="location.current"
           :radius="location.radius"
           @click="handleClickCircleMarker(location.id)"
@@ -47,11 +47,9 @@
           <l-tooltip :options="{ direction: 'top' }">
             <div class="map-country-tooltip">
               <h4 class="map-country-tooltip__title">{{ location.name }}</h4>
-              <div
-                :class="`map-country-tooltip__info map-country-tooltip__info--${currentIndicator.color}`"
-              >
+              <div class="map-country-tooltip__info">
                 {{ currentIndicator.label }}:
-                <span>{{
+                <span :class="`${currentIndicator.color}-text`">{{
                   $filters.numberFormat(
                     location[currentIndicatorType.key][currentIndicator.key]
                   )
@@ -62,11 +60,6 @@
         </l-circle-marker>
       </l-map>
     </div>
-
-    <v-current-country-info-card
-      class="current-country-info"
-      v-if="currentCountry"
-    />
   </div>
 </template>
 
@@ -78,6 +71,7 @@ import {
   LTileLayer,
   LCircleMarker,
   LTooltip,
+  LControl,
 } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -102,6 +96,7 @@ export default {
     LTileLayer,
     LCircleMarker,
     LTooltip,
+    LControl,
     VIndicatorsSelect,
     VIndicatorsTypesSelect,
     VMapLegend,
@@ -114,8 +109,8 @@ export default {
 
       tileLayerURL:
         "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
-      zoom: 3,
-      center: [55, 25],
+      zoom: 2,
+      center: [40, 10],
     };
   },
 
@@ -162,11 +157,15 @@ export default {
       const country =
         this.countries.find((country) => country.id === countryId) || null;
 
-      this.setCurrentCountry(country);
+      if (!this.currentCountry || this.currentCountry.id !== country.id) {
+        this.setCurrentCountry(country);
+      } else {
+        this.setCurrentCountry(null);
+      }
     },
 
-    mapReady() {
-      this.setUserLocation();
+    handleReadyMap() {
+      // this.setUserLocation();
     },
 
     zoomUpdated(zoom) {
@@ -182,8 +181,8 @@ export default {
     },
     scale(d) {
       const min = 1;
-      const factor = 5;
-      const zoomFactor = this.zoom >= 5 ? 1 : this.zoom / 10; // adjust divisor for best optics
+      const factor = 6;
+      const zoomFactor = this.zoom >= 6 ? 1 : this.zoom / 10; // adjust divisor for best optics
       return Math.floor(Math.log(d) * factor * zoomFactor) + min;
     },
     setUserLocation() {
@@ -257,38 +256,16 @@ export default {
 
 .map-country-tooltip {
   &__title {
-    font-size: 20px;
     margin: 0;
     margin-bottom: 10px;
-    font-weight: 500;
+    font-size: 20px;
+    font-weight: 400;
   }
   &__info {
-    font-size: 16px;
+    font-size: 14px;
     span {
       font-weight: bold;
     }
-    &--cases {
-      span {
-        color: $cases-color;
-      }
-    }
-    &--deaths {
-      span {
-        color: $deaths-color;
-      }
-    }
-    &--recovered {
-      span {
-        color: $recovered-color;
-      }
-    }
   }
-}
-
-.current-country-info {
-  position: absolute;
-  z-index: 999;
-  bottom: 20px;
-  left: 20px;
 }
 </style>

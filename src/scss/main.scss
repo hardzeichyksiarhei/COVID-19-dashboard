@@ -1,120 +1,139 @@
 /* PrimeVue */
 
 /* Custom Variables */
-@import './variables';
+@import "./variables";
 
 /* Custom Styles */
 
-html, body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    background-color: var(--surface-a);
-    color: var(--text-color);
-    font-family: var(--font-family);
-    font-weight: 400;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: var(--surface-a);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-weight: 400;
 }
 
-*, *:after, *:before {
-    box-sizing: border-box;
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
 }
 
 a {
-    color: #fff;
-    transition: .25s color ease;
-    &:hover {
-        color: var(--primary-color);
-        text-decoration: none;
-    }
+  color: #fff;
+  transition: 0.25s color ease;
+  &:hover {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
 }
 
 .cases-text {
-      color: $cases-color;
-    
-  }
-  .deaths-text {
-
-      color: $deaths-color;
-    
-  }
-  .recovered-text {
-  
-      color: $recovered-color;
-    
-  }
-  .tests-text {
-
-      color: $tests-color;
-    
-  }
+  color: $cases-color;
+}
+.deaths-text {
+  color: $deaths-color;
+}
+.recovered-text {
+  color: $recovered-color;
+}
+.tests-text {
+  color: $tests-color;
+}
 
 .app {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: var(--surface-b);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--surface-b);
+}
+
+.app-loading {
+  position: fixed;
+  z-index: 99999;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--surface-b);
+  span {
+      font-size: 24px;
+  }
 }
 
 .app-toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 60px;
-    background-color: var(--surface-a);
-    border-bottom: 1px solid var(--surface-d);
-    padding: 15px;
-    &__updated {
-        span {
-            color: var(--text-color);
-        }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  background-color: var(--surface-a);
+  border-bottom: 1px solid var(--surface-d);
+  padding: 15px;
+  &__updated {
+    span {
+      color: var(--text-color);
     }
+  }
 }
 
 .app-content {
-    flex-grow: 1;
-    padding: 15px;
-    
+  flex-grow: 1;
+  padding: 15px;
 }
 
 .app-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 60px;
-    background-color: var(--surface-a);
-    border-top: 1px solid var(--surface-d);
-    padding: 15px;
-    &__copyright {
-        color: var(--text-color);
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  background-color: var(--surface-a);
+  border-top: 1px solid var(--surface-d);
+  padding: 15px;
+  &__copyright {
+    color: var(--text-color);
+  }
 }
 
 .maximize-btn {
-    position: absolute;
-    right: -14px;
-    top: -14px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 32px;
-    height: 32px;
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    background-color: $primary-color;
-    opacity: 0;
-    transition: .25s opacity ease;
-    cursor: pointer;
-    &:focus {
-        outline: none;
-    }
+  position: absolute;
+  right: -14px;
+  top: -14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  background-color: $primary-color;
+  opacity: 0;
+  transition: 0.25s opacity ease;
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
 }
 
 .p-inputtext {
-    padding: 0.5rem 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .p-dialog-mask {
-    z-index: 1000 !important;
+  z-index: 1000 !important;
 }
 
+.fade-enter-active,
+.fade-leave-active {
+  transition: 0.5s opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
