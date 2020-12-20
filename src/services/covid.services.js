@@ -18,26 +18,46 @@ const getAll = async () => {
       recovered: global.todayRecovered,
     },
     all100: {
-      cases: Math.round((global.cases / global.population) * 1000000),
-      deaths: Math.round((global.deaths / global.population) * 1000000),
-      recovered: Math.round((global.recovered / global.population) * 1000000),
+      cases: Math.round((global.cases / global.population) * 1e5),
+      deaths: Math.round((global.deaths / global.population) * 1e5),
+      recovered: Math.round((global.recovered / global.population) * 1e5),
     },
     today100: {
-      cases: Math.round((global.todayCases / global.population) * 1000000),
-      deaths: Math.round((global.todayDeaths / global.population) * 1000000),
-      recovered: Math.round(
-        (global.todayRecovered / global.population) * 1000000
-      ),
+      cases: Math.round((global.todayCases / global.population) * 1e5),
+      deaths: Math.round((global.todayDeaths / global.population) * 1e5),
+      recovered: Math.round((global.todayRecovered / global.population) * 1e5),
     },
+    population: global.population,
     updated: global.updated,
   };
 };
 
-const getHistoricalAll = async () => {
-  const { data, status } = await axios.get(
+const getHistoricalAll = async (population = null) => {
+  const { data: historicalAll, status } = await axios.get(
     `${API_COVID_URL}/historical/all?lastdays=30`
   );
-  return status === 200 && data ? data : null;
+  if (status !== 200 || !historicalAll) return null;
+  if (!population) return null;
+
+  return {
+    all: historicalAll,
+    all100: {
+      cases: Object.keys(historicalAll.cases).reduce((acc, curr) => {
+        acc[curr] = Math.round((historicalAll.cases[curr] / population) * 1e5);
+        return acc;
+      }, {}),
+      deaths: Object.keys(historicalAll.deaths).reduce((acc, curr) => {
+        acc[curr] = Math.round((historicalAll.deaths[curr] / population) * 1e5);
+        return acc;
+      }, {}),
+      recovered: Object.keys(historicalAll.recovered).reduce((acc, curr) => {
+        acc[curr] = Math.round(
+          (historicalAll.recovered[curr] / population) * 1e5
+        );
+        return acc;
+      }, {}),
+    },
+  };
 };
 
 export default {

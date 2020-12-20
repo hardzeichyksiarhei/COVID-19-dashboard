@@ -7,7 +7,7 @@
     <div class="chart-card__indicator-select">
       <v-indicators-select width="100%" />
     </div>
-    <div v-if="countries" class="chart-card__chart">
+    <div v-if="historicalAll" class="chart-card__chart">
       <Chart type="bar" :data="basicData" :options="options" />
     </div>
   </div>
@@ -17,7 +17,6 @@
 import { toRefs } from "vue";
 
 import Chart from "primevue/chart";
-import covidService from "../../services/covid.services";
 import { mapGetters } from "vuex";
 import VIndicatorsSelect from "../VIndicatorsSelect";
 
@@ -37,7 +36,6 @@ export default {
   data() {
     return {
       LABELS_COLOR,
-      countries: null,
       options: {
         scales: {
           xAxes: [
@@ -67,24 +65,26 @@ export default {
 
   computed: {
     ...mapGetters({
+      covidAll: "app/covidAll",
+      historicalAll: "app/historicalAll",
       currentIndicator: "countries/currentIndicator",
     }),
     basicData() {
       return {
-        labels: Object.keys(this.countries[this.currentIndicator.key]),
+        labels: Object.keys(
+          this.historicalAll["all"][this.currentIndicator.key]
+        ),
         datasets: [
           {
             label: this.currentIndicator.label,
             backgroundColor: LABELS_COLOR[this.currentIndicator.color],
-            data: Object.values(this.countries[this.currentIndicator.key]),
+            data: Object.values(
+              this.historicalAll["all"][this.currentIndicator.key]
+            ),
           },
         ],
       };
     },
-  },
-
-  async created() {
-    this.countries = await covidService.getHistoricalAll();
   },
 };
 </script>
