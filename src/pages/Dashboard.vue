@@ -21,11 +21,11 @@ import { useStore } from "vuex";
 import VTableCard from "../components/cards/VTableCard";
 import VMap from "../components/VMap.vue";
 import VCountries from "../components/VCountries.vue";
-import VChart from "../components/cards/VChart"
+import VChart from "../components/cards/VChart";
 
 export default {
   name: "Dashboard",
-  components: { VCountries, VTableCard, VMap, VChart},
+  components: { VCountries, VTableCard, VMap, VChart },
 
   setup() {
     const store = useStore();

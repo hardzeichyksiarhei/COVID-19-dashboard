@@ -17,9 +17,11 @@
         v-model="zoom"
         v-model:zoom="zoom"
         :center="center"
-        :minZoom="2"
-        :maxZoom="10"
-        :zoomAnimation="true"
+        :min-zoom="2"
+        :max-zoom="10"
+        :max-bounds="maxBounds"
+        :max-bounds-viscosity="1"
+        :zoom-animation="true"
         @update:zoom="handleChangeZoom"
         @update:center="handleChangeCenter"
         @ready="handleReadyMap"
@@ -111,7 +113,11 @@ export default {
 
     const map = ref(null);
     const zoom = ref(2);
-    const center = ref([40, 10]);
+    const center = ref([40, 0]);
+    const maxBounds = ref([
+      [-90, -180],
+      [90, 180],
+    ]);
 
     const countries = computed(() => store.getters["countries/countries"]);
     const currentCountry = computed(
@@ -178,6 +184,7 @@ export default {
       FILL_COLOR,
       zoom,
       center,
+      maxBounds,
 
       countries,
       currentCountry,
@@ -234,7 +241,7 @@ export default {
 }
 
 ::v-deep .leaflet-container {
-  background: var(--surface-b);
+  background: #222;
 }
 
 ::v-deep .leaflet-top,
