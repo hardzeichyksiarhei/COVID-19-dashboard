@@ -33,6 +33,12 @@ const getAll = async () => {
   };
 };
 
+const getHistoricalAll = async () => {
+  const { data, status } = await axios.get(`${API_COVID_URL}/historical/all?lastdays=30`);
+  return status === 200 && data ? data : null;
+};
+
 export default {
   getAll,
+  getHistoricalAll,
 };
