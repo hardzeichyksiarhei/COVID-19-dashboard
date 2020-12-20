@@ -32,34 +32,51 @@
           </div>
         </l-control>
 
-        <l-circle-marker
-          v-for="(location, idx) in locations"
-          :key="idx"
-          :lat-lng="[location.meta.lat, location.meta.long]"
-          :fillColor="
-            !location.current ? FILL_COLOR[currentIndicator.color] : 'purple'
-          "
-          :fillOpacity="!location.current ? 0.35 : 1"
-          :fill="true"
-          :color="location.current ? 'red' : 'transparent'"
-          :stroke="location.current"
-          :radius="location.radius"
-          @click="handleClickCircleMarker(location.id)"
-        >
-          <l-tooltip :options="{ direction: 'top' }">
-            <div class="map-country-tooltip">
-              <h4 class="map-country-tooltip__title">{{ location.name }}</h4>
-              <div class="map-country-tooltip__info">
-                {{ currentIndicator.label }}:
-                <span :class="`${currentIndicator.color}-text`">{{
-                  $filters.numberFormat(
-                    location[currentIndicatorType.key][currentIndicator.key]
-                  )
-                }}</span>
+        <template v-if="!isGeo">
+          <l-circle-marker
+            v-for="(location, idx) in locations"
+            :key="idx"
+            :lat-lng="[location.meta.lat, location.meta.long]"
+            :fillColor="
+              !location.current ? FILL_COLOR[currentIndicator.color] : 'purple'
+            "
+            :fillOpacity="!location.current ? 0.35 : 1"
+            :fill="true"
+            :color="location.current ? 'red' : 'transparent'"
+            :stroke="location.current"
+            :radius="location.radius"
+            @click="handleClickCircleMarker(location.id)"
+          >
+            <l-tooltip :options="{ direction: 'top' }">
+              <div class="map-country-tooltip">
+                <h4 class="map-country-tooltip__title">{{ location.name }}</h4>
+                <div class="map-country-tooltip__info">
+                  {{ currentIndicator.label }}:
+                  <span :class="`${currentIndicator.color}-text`">{{
+                    $filters.numberFormat(
+                      location[currentIndicatorType.key][currentIndicator.key]
+                    )
+                  }}</span>
+                </div>
               </div>
-            </div>
-          </l-tooltip>
-        </l-circle-marker>
+            </l-tooltip>
+          </l-circle-marker>
+        </template>
+
+        <l-geo-json
+          v-show="isGeo"
+          :geojson="GEO_JSON"
+          :options="{
+            style: {
+              color: FILL_COLOR[currentIndicator?.key],
+              fillColor: FILL_COLOR[currentIndicator?.key],
+              fillOpacity: 0.35,
+              weight: 1,
+            },
+            //onEachFeature: onEachFeatureFunction,
+          }"
+          @ready="handleReadyGeoJson"
+        />
       </l-map>
     </div>
   </div>
@@ -74,6 +91,7 @@ import {
   LCircleMarker,
   LTooltip,
   LControl,
+  LGeoJson,
 } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -81,6 +99,8 @@ import VIndicatorsSelect from "../VIndicatorsSelect";
 import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
 import VMapLegend from "../VMapLegend.vue";
 import VCurrentCountryInfoCard from "./VCurrentCountryInfoCard";
+
+import GEO_JSON from "./custom.geo.json";
 
 const FILL_COLOR = {
   cases: "var(--cases-color)",
@@ -99,6 +119,7 @@ export default {
     LCircleMarker,
     LTooltip,
     LControl,
+    LGeoJson,
     VIndicatorsSelect,
     VIndicatorsTypesSelect,
     VMapLegend,
@@ -107,7 +128,13 @@ export default {
 
   data() {
     return {
+      GEO_JSON,
       FILL_COLOR,
+
+      isGeo: true,
+      leafletGeoObject: null,
+      color: "transparent",
+      fillColor: "transparent",
 
       tileLayerURL:
         "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
@@ -124,6 +151,26 @@ export default {
       currentIndicatorType: "countries/currentIndicatorType",
     }),
 
+    // onEachFeatureFunction() {
+    //   if (!this.currentIndicatorType || !this.currentIndicator) return;
+
+    //   return (feature) => {
+    //     const country = this.countries.find(
+    //       (country) =>
+    //         country.name === feature.properties.name ||
+    //         country.meta.iso2 === feature.properties.iso_a2 ||
+    //         country.meta.iso3 === feature.properties.iso_a3
+    //     );
+
+    //     if (!country) return;
+
+    //     // const indicatorValue =
+    //     //   country[this.currentIndicatorType.key][this.currentIndicator.key];
+
+    //     // console.log(indicatorValue);
+    //   };
+    // },
+
     locations() {
       return this.countries.map((country) => ({
         ...country,
@@ -138,11 +185,46 @@ export default {
   watch: {
     currentCountry(country) {
       if (!country) return;
+      this.flyTo(country.meta.lat, country.meta.long);
+    },
 
-      const {
-        meta: { lat, long },
-      } = country;
-      this.flyTo(lat, long);
+    currentIndicator(value) {
+      if (!this.leafletGeoObject || !value) return;
+
+      // this.leafletGeoObject.setStyle({
+      //   color: FILL_COLOR[value.key],
+      //   fillColor: FILL_COLOR[value.key],
+      //   fillOpacity: 0.35,
+      //   weight: 1,
+      // });
+
+      this.leafletGeoObject.eachLayer((layer) => {
+        const country = this.countries.find(
+          (country) =>
+            country.name === layer.feature.properties.name ||
+            country.meta.iso2 === layer.feature.properties.iso_a2 ||
+            country.meta.iso3 === layer.feature.properties.iso_a3
+        );
+        if (!country) {
+          layer.setStyle({
+            color: "transparent",
+            fillColor: "transparent",
+          });
+          return;
+        }
+
+        const indicatorValue =
+          country[this.currentIndicatorType.key][this.currentIndicator.key];
+
+        console.log(indicatorValue);
+
+        layer.setStyle({
+          color: FILL_COLOR[value.key],
+          fillColor: FILL_COLOR[value.key],
+          fillOpacity: Math.random(),
+          weight: 1,
+        });
+      });
     },
   },
 
@@ -150,6 +232,10 @@ export default {
     ...mapActions({
       setCurrentCountry: "countries/setCurrentCountry",
     }),
+
+    handleReadyGeoJson(leafletGeoObject) {
+      this.leafletGeoObject = leafletGeoObject;
+    },
 
     handleChangeIndicator(indicator) {
       this.currentIndicator = indicator;

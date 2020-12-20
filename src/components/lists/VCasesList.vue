@@ -1,38 +1,33 @@
 <template>
-  <Card>
-    <template #content>
-      <v-indicators-types-select width="100%" />
-      <div class="indicators-table-card">
-        <DataTable :value="tableCountry" :scrollable="true" :scrollHeight="height">
-          <Column 
-            field="name" 
-            header="Country"  
-            bodyClass="indicators-table-card__content country"
-          ></Column>
-          <Column
-            :field="`${this.currentIndicatorType.key}.cases`"
-            header="Cases"
-            bodyClass="indicators-table-card__content cases"
-          ></Column>
-          <Column
-            :field="`${this.currentIndicatorType.key}.deaths`"
-            header="Deaths"
-            bodyClass="indicators-table-card__content deaths"
-          ></Column>
-          <Column
-            :field="`${this.currentIndicatorType.key}.recovered`"
-            header="Recovered"
-            bodyClass="indicators-table-card__content recovered"
-          ></Column>
-        </DataTable>
-      </div>
-    </template>
-  </Card>
+  <v-indicators-types-select width="100%" />
+  <div class="indicators-table-card">
+    <DataTable :value="tableCountry" :scrollable="true" :scrollHeight="height">
+      <Column
+        field="name"
+        header="Country"
+        bodyClass="indicators-table-card__content country"
+      ></Column>
+      <Column
+        :field="`${this.currentIndicatorType.key}.cases`"
+        header="Cases"
+        bodyClass="indicators-table-card__content cases"
+      ></Column>
+      <Column
+        :field="`${this.currentIndicatorType.key}.deaths`"
+        header="Deaths"
+        bodyClass="indicators-table-card__content deaths"
+      ></Column>
+      <Column
+        :field="`${this.currentIndicatorType.key}.recovered`"
+        header="Recovered"
+        bodyClass="indicators-table-card__content recovered"
+      ></Column>
+    </DataTable>
+  </div>
 </template>
 
 <script>
 import DataTable from "primevue/datatable";
-import Card from "primevue/card";
 import Column from "primevue/column";
 import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
 
@@ -41,7 +36,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "VCasesList",
 
-  components: { Card, DataTable, Column, VIndicatorsTypesSelect },
+  components: { DataTable, Column, VIndicatorsTypesSelect },
 
   props: ["countries", "height"],
 
@@ -93,11 +88,12 @@ export default {
   }
 }
 .indicators-table-card {
+  margin-top: 15px;
   &__content {
     color: $primary-color;
     font-size: 14px;
     font-weight: 600;
-    &.country{
+    &.country {
       color: white;
     }
     &.cases {
@@ -114,5 +110,4 @@ export default {
     }
   }
 }
-
 </style>

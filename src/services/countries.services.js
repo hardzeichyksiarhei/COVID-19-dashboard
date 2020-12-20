@@ -15,6 +15,8 @@ const getCountries = async () => {
       flag: country.countryInfo.flag,
       lat: Number(country.countryInfo.lat),
       long: Number(country.countryInfo.long),
+      iso2: country.countryInfo.iso2,
+      iso3: country.countryInfo.iso3,
     },
     all: {
       cases: country.cases,
