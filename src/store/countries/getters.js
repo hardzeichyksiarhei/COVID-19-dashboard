@@ -1,5 +1,5 @@
 export default {
-  isLoading: (state) => state.isLoading,
+  isCountriesLoading: (state) => state.isCountriesLoading,
 
   countryById: (state) => (id) =>
     state.countries.find(({ countryInfo }) => countryInfo._id === id) || null,

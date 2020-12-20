@@ -36,12 +36,10 @@
           v-for="(location, idx) in locations"
           :key="idx"
           :lat-lng="[location.meta.lat, location.meta.long]"
-          :fillColor="
-            !location.current ? FILL_COLOR[currentIndicator.color] : 'purple'
-          "
-          :fillOpacity="!location.current ? 0.35 : 1"
+          :fillColor="FILL_COLOR[currentIndicator.color]"
+          :fillOpacity="location.current ? 1 : 0.4"
           :fill="true"
-          :color="location.current ? 'red' : 'transparent'"
+          color="white"
           :stroke="location.current"
           :radius="location.radius"
           @click="handleClickCircleMarker(location.id)"
@@ -183,8 +181,8 @@ export default {
     },
     scale(d) {
       const min = 1;
-      const factor = 5;
-      const zoomFactor = this.zoom >= 5 ? 1 : this.zoom / 10; // adjust divisor for best optics
+      const factor = 6;
+      const zoomFactor = this.zoom >= 6 ? 1 : this.zoom / 10; // adjust divisor for best optics
       return Math.floor(Math.log(d) * factor * zoomFactor) + min;
     },
     setUserLocation() {

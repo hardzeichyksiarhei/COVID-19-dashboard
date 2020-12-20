@@ -1,12 +1,12 @@
 import * as types from "./types";
 
-import covidService from "../../services/countries.services";
+import countriesService from "../../services/countries.services";
 
 export default {
   async fetchCountries({ commit }) {
     commit(types.REQUESTED_COUNTRIES);
     try {
-      const countries = await covidService.getCountries();
+      const countries = await countriesService.getCountries();
       commit(types.REQUESTED_COUNTRIES_SUCCEEDED, countries);
     } catch (error) {
       commit(types.REQUESTED_COUNTRIES_FAILED, error);

@@ -1,5 +1,5 @@
 export const initialState = () => ({
-  isCountriesLoading: false,
+  isCountriesLoading: true,
   currentCountry: null,
   countries: [],
 
