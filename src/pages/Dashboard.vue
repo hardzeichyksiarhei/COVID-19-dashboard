@@ -25,7 +25,7 @@ import VChart from "../components/VChart.vue"
 
 export default {
   name: "Dashboard",
-  components: { VCountries, VTableCard, VMap, VChart},
+  components: { VCountries, VTableCard, VMap, VChart },
 
   setup() {
     const store = useStore();

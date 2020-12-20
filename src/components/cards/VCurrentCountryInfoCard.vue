@@ -24,15 +24,25 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { computed } from "vue";
+import { useStore } from "vuex";
 export default {
   name: "VCurrentCountryInfoCard",
 
-  computed: {
-    ...mapGetters({
-      currentCountry: "countries/currentCountry",
-      currentIndicatorType: "countries/currentIndicatorType",
-    }),
+  setup() {
+    const store = useStore();
+
+    const currentCountry = computed(
+      () => store.getters["countries/currentCountry"]
+    );
+    const currentIndicatorType = computed(
+      () => store.getters["countries/currentIndicatorType"]
+    );
+
+    return {
+      currentCountry,
+      currentIndicatorType,
+    };
   },
 };
 </script>

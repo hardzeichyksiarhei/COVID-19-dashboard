@@ -14,18 +14,22 @@
 
     <div id="map">
       <l-map
-        ref="map"
         v-model="zoom"
         v-model:zoom="zoom"
         :center="center"
-        :minZoom="2"
-        :maxZoom="10"
-        :zoomAnimation="true"
-        @update:zoom="zoomUpdated"
-        @update:center="centerUpdated"
+        :min-zoom="2"
+        :max-zoom="10"
+        :max-bounds="maxBounds"
+        :max-bounds-viscosity="1"
+        :zoom-animation="true"
+        @update:zoom="handleChangeZoom"
+        @update:center="handleChangeCenter"
         @ready="handleReadyMap"
       >
-        <l-tile-layer :url="tileLayerURL"></l-tile-layer>
+        <l-tile-layer
+          url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+          attribution="COVID-19"
+        ></l-tile-layer>
         <l-control position="bottomleft">
           <div class="current-country-info">
             <v-current-country-info-card v-if="currentCountry" />
@@ -64,7 +68,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { ref, computed, watch } from "vue";
+import { useStore } from "vuex";
 
 import {
   LMap,
@@ -103,95 +108,96 @@ export default {
     VCurrentCountryInfoCard,
   },
 
-  data() {
-    return {
-      FILL_COLOR,
+  setup() {
+    const store = useStore();
 
-      tileLayerURL:
-        "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
-      zoom: 2,
-      center: [40, 10],
-    };
-  },
+    const map = ref(null);
+    const zoom = ref(2);
+    const center = ref([40, 0]);
+    const maxBounds = ref([
+      [-90, -180],
+      [90, 180],
+    ]);
 
-  computed: {
-    ...mapGetters({
-      countries: "countries/countries",
-      currentCountry: "countries/currentCountry",
-      currentIndicator: "countries/currentIndicator",
-      currentIndicatorType: "countries/currentIndicatorType",
-    }),
+    const countries = computed(() => store.getters["countries/countries"]);
+    const currentCountry = computed(
+      () => store.getters["countries/currentCountry"]
+    );
+    const currentIndicator = computed(
+      () => store.getters["countries/currentIndicator"]
+    );
+    const currentIndicatorType = computed(
+      () => store.getters["countries/currentIndicatorType"]
+    );
 
-    locations() {
-      return this.countries.map((country) => ({
+    const locations = computed(() =>
+      countries.value.map((country) => ({
         ...country,
-        radius: this.scale(
-          country[this.currentIndicatorType.key][this.currentIndicator.key]
+        radius: scale(
+          country[currentIndicatorType.value.key][currentIndicator.value.key]
         ),
-        current: country.id === this.currentCountry?.id,
-      }));
-    },
-  },
+        current: country.id === currentCountry.value?.id,
+      }))
+    );
 
-  watch: {
-    currentCountry(country) {
+    const setCurrentCountry = (country) =>
+      store.dispatch("countries/setCurrentCountry", country);
+
+    watch(currentCountry, (country) => {
       if (!country) return;
-
-      const {
-        meta: { lat, long },
-      } = country;
-      this.flyTo(lat, long);
-    },
-  },
-
-  methods: {
-    ...mapActions({
-      setCurrentCountry: "countries/setCurrentCountry",
-    }),
-
-    handleChangeIndicator(indicator) {
-      this.currentIndicator = indicator;
-    },
-
-    handleClickCircleMarker(countryId) {
-      const country =
-        this.countries.find((country) => country.id === countryId) || null;
-
-      if (!this.currentCountry || this.currentCountry.id !== country.id) {
-        this.setCurrentCountry(country);
-      } else {
-        this.setCurrentCountry(null);
-      }
-    },
-
-    handleReadyMap() {
-      // this.setUserLocation();
-    },
-
-    zoomUpdated(zoom) {
-      this.zoom = zoom;
-    },
-    centerUpdated(center) {
-      this.center = center;
-    },
-    flyTo(lat, lon) {
-      this.$refs.map.leafletObject.flyTo([lat, lon], this.zoom, {
+      map.value.flyTo([country.meta.lat, country.meta.long], zoom.value, {
         animate: false,
       });
-    },
-    scale(d) {
+    });
+
+    const scale = (d) => {
       const min = 1;
       const factor = 6;
-      const zoomFactor = this.zoom >= 6 ? 1 : this.zoom / 10; // adjust divisor for best optics
+      const zoomFactor = zoom.value >= 6 ? 1 : zoom.value / 10;
       return Math.floor(Math.log(d) * factor * zoomFactor) + min;
-    },
-    setUserLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(({ coords }) => {
-          this.flyTo(coords.latitude, coords.longitude);
-        });
+    };
+
+    const handleClickCircleMarker = (countryId) => {
+      const country =
+        countries.value.find((country) => country.id === countryId) || null;
+
+      if (!currentCountry.value || currentCountry.value.id !== country.id) {
+        setCurrentCountry(country);
+      } else {
+        setCurrentCountry(null);
       }
-    },
+    };
+
+    const handleReadyMap = (leafletObject) => {
+      map.value = leafletObject;
+    };
+
+    const handleChangeZoom = (value) => {
+      zoom.value = value;
+    };
+
+    const handleChangeCenter = (value) => {
+      center.value = value;
+    };
+
+    return {
+      FILL_COLOR,
+      zoom,
+      center,
+      maxBounds,
+
+      countries,
+      currentCountry,
+      currentIndicator,
+      currentIndicatorType,
+
+      locations,
+
+      handleClickCircleMarker,
+      handleReadyMap,
+      handleChangeZoom,
+      handleChangeCenter,
+    };
   },
 };
 </script>
@@ -235,7 +241,7 @@ export default {
 }
 
 ::v-deep .leaflet-container {
-  background: var(--surface-b);
+  background: #222;
 }
 
 ::v-deep .leaflet-top,
