@@ -5,19 +5,19 @@
     </button>
 
     <div class="chart-card__indicator-select">
-      <v-indicators-select width="100%" />
+      <v-indicators-select
+        width="100%"
+        @change:indicator="handleChangeIndicator"
+      />
     </div>
-    <div v-if="countries" class="chart-card__chart">
+    <div v-if="historicalAll" class="chart-card__chart">
       <Chart type="bar" :data="basicData" :options="options" />
     </div>
   </div>
 </template>
 
 <script>
-import { toRefs } from "vue";
-
 import Chart from "primevue/chart";
-import covidService from "../../services/covid.services";
 import { mapGetters } from "vuex";
 import VIndicatorsSelect from "../VIndicatorsSelect";
 
@@ -37,7 +37,6 @@ export default {
   data() {
     return {
       LABELS_COLOR,
-      countries: null,
       options: {
         scales: {
           xAxes: [
@@ -50,41 +49,34 @@ export default {
     };
   },
 
-  setup(props, { emit }) {
-    const { currentIndicator } = toRefs(props);
-    let localCurrentIndicator = currentIndicator;
-
-    const handleChangeIndicator = (indicator) => {
-      localCurrentIndicator = indicator;
-      emit("change:indicator", indicator);
-    };
-
-    return {
-      localCurrentIndicator,
-      handleChangeIndicator,
-    };
-  },
-
   computed: {
     ...mapGetters({
+      covidAll: "app/covidAll",
+      historicalAll: "app/historicalAll",
       currentIndicator: "countries/currentIndicator",
     }),
     basicData() {
       return {
-        labels: Object.keys(this.countries[this.currentIndicator.key]),
+        labels: Object.keys(
+          this.historicalAll["all"][this.currentIndicator.key]
+        ),
         datasets: [
           {
             label: this.currentIndicator.label,
             backgroundColor: LABELS_COLOR[this.currentIndicator.color],
-            data: Object.values(this.countries[this.currentIndicator.key]),
+            data: Object.values(
+              this.historicalAll["all"][this.currentIndicator.key]
+            ),
           },
         ],
       };
     },
   },
 
-  async created() {
-    this.countries = await covidService.getHistoricalAll();
+  methods: {
+    handleChangeIndicator(indicator) {
+      console.log(indicator);
+    },
   },
 };
 </script>

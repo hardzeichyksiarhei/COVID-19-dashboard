@@ -29,15 +29,15 @@ const getCountries = async () => {
       recovered: country.todayRecovered,
     },
     all100: {
-      cases: Math.round((country.cases / country.population) * 1000000),
-      deaths: Math.round((country.deaths / country.population) * 1000000),
-      recovered: Math.round((country.recovered / country.population) * 1000000),
+      cases: Math.round((country.cases / country.population) * 1e5),
+      deaths: Math.round((country.deaths / country.population) * 1e5),
+      recovered: Math.round((country.recovered / country.population) * 1e5),
     },
     today100: {
-      cases: Math.round((country.todayCases / country.population) * 1000000),
-      deaths: Math.round((country.todayDeaths / country.population) * 1000000),
+      cases: Math.round((country.todayCases / country.population) * 1e5),
+      deaths: Math.round((country.todayDeaths / country.population) * 1e5),
       recovered: Math.round(
-        (country.todayRecovered / country.population) * 1000000
+        (country.todayRecovered / country.population) * 1e5
       ),
     },
   }));
