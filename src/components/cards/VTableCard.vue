@@ -6,7 +6,7 @@
     <div class="table-card__indicator-select">
       <v-indicators-types-select width="100%" />
     </div>
-    <div class="table-card__body">
+    <div class="table-card__body" :class="{ 'is-dialog': isDialog }">
       <v-countries-table :countries="countries" />
     </div>
   </div>
@@ -61,7 +61,11 @@ export default {
   }
 }
 
+.table-card__body.is-dialog{
+    height: 70vh;
+}
+
 .table-card.is-dialog {
-  height: 75vh;
+  height: 80vh;
 }
 </style>
