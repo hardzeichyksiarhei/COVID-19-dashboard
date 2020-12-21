@@ -6,7 +6,8 @@
     <div class="table-card__indicator-select">
       <v-indicators-types-select width="100%" />
     </div>
-    <div class="table-card__body" :class="{ 'is-dialog': isDialog }">
+
+    <div class="table-card__body">
       <v-countries-table :countries="countries" />
     </div>
   </div>
@@ -46,6 +47,7 @@ export default {
 
 <style lang="scss" scoped>
 .table-card {
+  height: calc(55vh - 85px);
   position: relative;
   background: var(--surface-a);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -56,16 +58,27 @@ export default {
       opacity: 1;
     }
   }
+
   &__body {
-    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: calc(100% - 30px);
   }
 }
 
-.table-card__body.is-dialog{
-    height: 70vh;
+.table-card__body.is-dialog {
+  height: 70vh;
 }
 
 .table-card.is-dialog {
   height: 80vh;
+}
+
+@media screen and (max-width: 1366px) {
+  .table-card {
+    margin-top: 0;
+    height: 50vh;
+  }
 }
 </style>

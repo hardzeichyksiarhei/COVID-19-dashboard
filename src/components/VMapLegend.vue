@@ -24,9 +24,11 @@ export default {
 <style lang="scss" scoped>
 .map-card-legend {
   display: flex;
+  justify-content: center;
   align-items: center;
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .map-card-legend-item {
@@ -55,6 +57,19 @@ export default {
   }
   &__text {
     font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .map-card-legend {
+    margin-top: 15px;
+    margin-bottom: 0;
+  }
+
+  .map-card-legend-item {
+    &:first-of-type {
+      margin-left: 0;
+    }
   }
 }
 </style>

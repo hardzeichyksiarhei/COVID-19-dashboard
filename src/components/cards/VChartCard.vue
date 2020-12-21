@@ -10,6 +10,7 @@
       <span class="p-input-icon-right">
         <i class="pi pi-arrow-right pointer" @click="handleChangeDays" />
         <InputText
+          :style="{ width: '100%' }"
           v-model="days"
           @keydown.enter="handleChangeDays"
           :min="5"
@@ -227,8 +228,10 @@ export default {
 
 <style lang="scss" scoped>
 .chart-card {
-  margin-top: 1rem;
-  height: calc(100vh - 420px - 120px - 82px);
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  height: calc(45vh - 85px);
   position: relative;
   background: var(--surface-a);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -249,6 +252,10 @@ export default {
   }
 
   &__chart {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
     padding: 15px;
   }
 }
@@ -258,6 +265,19 @@ export default {
   .chart-card__chart {
     width: 70%;
     margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 1366px) {
+  .chart-card {
+    margin-top: 0;
+    height: 50vh;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .chart-card {
+    height: auto;
   }
 }
 </style>

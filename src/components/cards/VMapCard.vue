@@ -218,16 +218,17 @@ export default {
 }
 
 .map-card-header {
-  height: 60px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 0 10px;
+  flex-wrap: wrap;
+  padding: 15px;
 }
 
 .map-card-selects {
+  flex-grow: 1;
   display: grid;
-  grid-template-columns: 180px 180px;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
