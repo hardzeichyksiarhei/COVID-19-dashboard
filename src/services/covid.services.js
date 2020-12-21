@@ -33,11 +33,13 @@ const getAll = async () => {
 };
 
 const getHistoricalAll = async (lastdays = 30, population = null) => {
+  if (!population) return null;
+
   const { data: historicalAll, status } = await axios.get(
     `${API_COVID_URL}/historical/all?lastdays=${lastdays}`
   );
+
   if (status !== 200 || !historicalAll) return null;
-  if (!population) return null;
 
   return {
     all: historicalAll,
@@ -60,7 +62,55 @@ const getHistoricalAll = async (lastdays = 30, population = null) => {
   };
 };
 
+const getHistoricalCountry = async (
+  countryId = null,
+  lastdays = 30,
+  population = null
+) => {
+  if (!countryId) return null;
+  if (!population) return null;
+
+  const { data: historicalCountry, status } = await axios.get(
+    `${API_COVID_URL}/historical/${countryId}?lastdays=${lastdays}`
+  );
+  if (status !== 200 || !historicalCountry) return null;
+
+  return {
+    all: historicalCountry.timeline,
+    all100: {
+      cases: Object.keys(historicalCountry.timeline.cases).reduce(
+        (acc, curr) => {
+          acc[curr] = Math.round(
+            (historicalCountry.timeline.cases[curr] / population) * 1e5
+          );
+          return acc;
+        },
+        {}
+      ),
+      deaths: Object.keys(historicalCountry.timeline.deaths).reduce(
+        (acc, curr) => {
+          acc[curr] = Math.round(
+            (historicalCountry.timeline.deaths[curr] / population) * 1e5
+          );
+          return acc;
+        },
+        {}
+      ),
+      recovered: Object.keys(historicalCountry.timeline.recovered).reduce(
+        (acc, curr) => {
+          acc[curr] = Math.round(
+            (historicalCountry.timeline.recovered[curr] / population) * 1e5
+          );
+          return acc;
+        },
+        {}
+      ),
+    },
+  };
+};
+
 export default {
   getAll,
   getHistoricalAll,
+  getHistoricalCountry,
 };

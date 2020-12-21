@@ -21,6 +21,7 @@ import Chart from "primevue/chart";
 import { mapGetters } from "vuex";
 import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
 
+import covidService from "../../services/covid.services";
 import { dateFormat } from "../../services/formats.services";
 
 const LABELS_COLOR = {
@@ -39,6 +40,8 @@ export default {
   data() {
     return {
       LABELS_COLOR,
+
+      historicalCountry: null,
     };
   },
 
@@ -60,27 +63,23 @@ export default {
       return "bar";
     },
     options() {
-      if (!this.currentCountry) {
-        return {
-          tooltips: {
-            mode: "index",
-            intersect: false,
-          },
-          responsive: true,
-          scales: {
-            xAxes: [{}],
-            yAxes: [
-              {
-                ticks: {
-                  callback: (label) => (label ? label.toExponential() : label),
-                },
+      return {
+        tooltips: {
+          mode: "index",
+          intersect: false,
+        },
+        responsive: true,
+        scales: {
+          xAxes: [{}],
+          yAxes: [
+            {
+              ticks: {
+                callback: (label) => (label ? label.toExponential() : label),
               },
-            ],
-          },
-        };
-      }
-
-      return {};
+            },
+          ],
+        },
+      };
     },
     basicData() {
       const indicatorType = this.currentIndicatorType;
@@ -93,32 +92,7 @@ export default {
           labels: Object.keys(
             this.historicalAll[indicatorType.key][this.currentIndicator.key]
           ),
-          datasets: [
-            {
-              label: "Cases",
-              borderColor: LABELS_COLOR["cases"],
-              fill: false,
-              data: Object.values(
-                this.historicalAll[indicatorType.key]["cases"]
-              ),
-            },
-            {
-              label: "Deaths",
-              borderColor: LABELS_COLOR["deaths"],
-              fill: false,
-              data: Object.values(
-                this.historicalAll[indicatorType.key]["deaths"]
-              ),
-            },
-            {
-              label: "Recovered",
-              borderColor: LABELS_COLOR["recovered"],
-              fill: false,
-              data: Object.values(
-                this.historicalAll[indicatorType.key]["recovered"]
-              ),
-            },
-          ],
+          datasets: this.getAllDataset(this.historicalAll[indicatorType.key]),
         };
       }
 
@@ -128,33 +102,97 @@ export default {
       ) {
         return {
           labels: [dateFormat(new Date())],
-          datasets: [
-            {
-              label: "Cases",
-              backgroundColor: LABELS_COLOR["cases"],
-              data: [this.covidAll[indicatorType.key]["cases"]],
-            },
-            {
-              label: "Deaths",
-              backgroundColor: LABELS_COLOR["deaths"],
-              data: [this.covidAll[indicatorType.key]["deaths"]],
-            },
-            {
-              label: "Recovered",
-              backgroundColor: LABELS_COLOR["recovered"],
-              data: [this.covidAll[indicatorType.key]["recovered"]],
-            },
-          ],
+          datasets: this.getTodayDataset(this.covidAll[indicatorType.key]),
         };
       }
 
-      return {};
+      if (
+        this.historicalCountry &&
+        ["all", "all100"].includes(indicatorType.key)
+      ) {
+        return {
+          labels: Object.keys(
+            this.historicalCountry[indicatorType.key][this.currentIndicator.key]
+          ),
+          datasets: this.getAllDataset(
+            this.historicalCountry[indicatorType.key]
+          ),
+        };
+      }
+
+      if (
+        this.currentCountry &&
+        ["today", "today100"].includes(indicatorType.key)
+      ) {
+        return {
+          labels: [dateFormat(new Date())],
+          datasets: this.getTodayDataset(
+            this.currentCountry[indicatorType.key]
+          ),
+        };
+      }
+
+      return null;
+    },
+  },
+
+  watch: {
+    async currentCountry(country) {
+      if (!country) {
+        this.historicalCountry = null;
+        return;
+      }
+      const historicalCountry = await covidService.getHistoricalCountry(
+        country.id,
+        30,
+        this.covidAll.population
+      );
+
+      this.historicalCountry = historicalCountry;
     },
   },
 
   methods: {
-    handleChangeIndicator(indicator) {
-      console.log(indicator);
+    getTodayDataset(data) {
+      return [
+        {
+          label: "Cases",
+          backgroundColor: LABELS_COLOR["cases"],
+          data: [data["cases"]],
+        },
+        {
+          label: "Deaths",
+          backgroundColor: LABELS_COLOR["deaths"],
+          data: [data["deaths"]],
+        },
+        {
+          label: "Recovered",
+          backgroundColor: LABELS_COLOR["recovered"],
+          data: [data["recovered"]],
+        },
+      ];
+    },
+    getAllDataset(data) {
+      return [
+        {
+          label: "Cases",
+          borderColor: LABELS_COLOR["cases"],
+          fill: false,
+          data: Object.values(data["cases"]),
+        },
+        {
+          label: "Deaths",
+          borderColor: LABELS_COLOR["deaths"],
+          fill: false,
+          data: Object.values(data["deaths"]),
+        },
+        {
+          label: "Recovered",
+          borderColor: LABELS_COLOR["recovered"],
+          fill: false,
+          data: Object.values(data["recovered"]),
+        },
+      ];
     },
   },
 };
@@ -186,6 +224,10 @@ export default {
 }
 
 .chart-card.is-dialog {
-  height: 30vh;
+  height: 80vh;
+  .chart-card__chart {
+    width: 70%;
+    margin: 0 auto;
+  }
 }
 </style>
