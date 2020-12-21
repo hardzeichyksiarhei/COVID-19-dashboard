@@ -163,7 +163,7 @@ export default {
 <style lang="scss" scoped>
 .chart-card {
   margin-top: 1rem;
-  height: calc(100vh - 421px - 120px - 45px);
+  height: calc(100vh - 420px - 120px - 82px);
   position: relative;
   background: var(--surface-a);
   border: 1px solid rgba(255, 255, 255, 0.3);

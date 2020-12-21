@@ -4,9 +4,11 @@
       <i class="pi pi-window-maximize"></i>
     </button>
     <div class="table-card__indicator-select">
-        <v-indicators-types-select width="100%" />
+      <v-indicators-types-select width="100%" />
     </div>
-    <v-cases-list :countries="countries" />
+    <div class="table-card__body">
+      <v-countries-table :countries="countries" />
+    </div>
   </div>
 </template>
 
@@ -14,13 +16,13 @@
 import { toRefs, computed } from "vue";
 import { useStore } from "vuex";
 
-import VCasesList from "../lists/VCasesList";
+import VCountriesTable from "../lists/VCountriesTable";
 import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
 
 export default {
   name: "VTableCard",
 
-  components: { VCasesList, VIndicatorsTypesSelect },
+  components: { VCountriesTable, VIndicatorsTypesSelect },
 
   props: ["isDialog"],
 
@@ -54,13 +56,12 @@ export default {
       opacity: 1;
     }
   }
-}
-
-.table-card {
-    height: calc(100vh - 382px);  
+  &__body {
+    height: 40vh;
+  }
 }
 
 .table-card.is-dialog {
-    height: 75vh;   
+  height: 75vh;
 }
 </style>
