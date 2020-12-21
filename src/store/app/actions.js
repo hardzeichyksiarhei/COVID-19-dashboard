@@ -15,11 +15,11 @@ export default {
     }
   },
 
-  async fetchHistoricalAll({ commit, state }) {
+  async fetchHistoricalAll({ commit, state }, lastdays = 30) {
     commit(types.REQUESTED_HISTORICAL_ALL);
     try {
       const historicalAll = await covidService.getHistoricalAll(
-        30,
+        lastdays,
         state.covidAll.population
       );
 

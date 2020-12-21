@@ -32,13 +32,19 @@
       </div>
     </div>
   </div>
+
+  <Toast />
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 
+import Toast from "primevue/toast";
+
 export default {
   name: "App",
+
+  components: { Toast },
 
   created() {
     this.$store.dispatch("app/fetchCovidAll");

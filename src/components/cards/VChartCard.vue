@@ -5,10 +5,17 @@
     </button>
 
     <div class="chart-card__indicator-select">
-      <v-indicators-types-select
-        width="100%"
-        @change:indicator="handleChangeIndicator"
-      />
+      <v-indicators-types-select width="100%" />
+
+      <span class="p-input-icon-right">
+        <i class="pi pi-arrow-right pointer" @click="handleChangeDays" />
+        <InputText
+          v-model="days"
+          @keydown.enter="handleChangeDays"
+          :min="5"
+          placeholder="Number of last days"
+        />
+      </span>
     </div>
     <div v-if="historicalAll" class="chart-card__chart">
       <Chart :type="type" :data="basicData" :options="options" />
@@ -17,12 +24,15 @@
 </template>
 
 <script>
-import Chart from "primevue/chart";
 import { mapGetters } from "vuex";
+
+import Chart from "primevue/chart";
+import InputText from "primevue/inputtext";
+
 import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
 
 import covidService from "../../services/covid.services";
-import { dateFormat } from "../../services/formats.services";
+import { numeralFormat, dateFormat } from "../../services/formats.services";
 
 const LABELS_COLOR = {
   cases: "#C62828",
@@ -33,7 +43,7 @@ const LABELS_COLOR = {
 export default {
   name: "VChartCard",
 
-  components: { VIndicatorsTypesSelect, Chart },
+  components: { InputText, Chart, VIndicatorsTypesSelect },
 
   props: ["isDialog"],
 
@@ -42,6 +52,9 @@ export default {
       LABELS_COLOR,
 
       historicalCountry: null,
+
+      currentDate: new Date(),
+      days: null,
     };
   },
 
@@ -74,7 +87,7 @@ export default {
           yAxes: [
             {
               ticks: {
-                callback: (label) => (label ? label.toExponential() : label),
+                callback: (label) => numeralFormat(label, "0 a").toUpperCase(),
               },
             },
           ],
@@ -144,7 +157,7 @@ export default {
       }
       const historicalCountry = await covidService.getHistoricalCountry(
         country.id,
-        30,
+        this.days || 30,
         this.covidAll.population
       );
 
@@ -153,6 +166,20 @@ export default {
   },
 
   methods: {
+    handleChangeDays() {
+      if (!this.days || this.days < 5 || this.days > 100) {
+        this.$toast.add({
+          severity: "warn",
+          summary: "Warning",
+          detail: !this.days
+            ? "Number of last days empty"
+            : "The number of the last days must be in the range [5, 100]",
+          life: 3000,
+        });
+        return;
+      }
+      this.$store.dispatch("app/fetchHistoricalAll", this.days);
+    },
     getTodayDataset(data) {
       return [
         {
@@ -213,9 +240,12 @@ export default {
   }
 
   &__indicator-select {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
     padding: 1rem;
     padding-top: 13px;
-    padding-bottom: 13px;
+    padding-bottom: 0;
   }
 
   &__chart {

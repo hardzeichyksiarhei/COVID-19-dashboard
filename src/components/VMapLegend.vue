@@ -12,10 +12,6 @@
       <span class="map-card-legend-item__color recovered"></span>
       <span class="map-card-legend-item__text">Recovered</span>
     </li>
-    <li class="map-card-legend-item">
-      <span class="map-card-legend-item__color tests"></span>
-      <span class="map-card-legend-item__text">Tests</span>
-    </li>
   </ul>
 </template>
 
@@ -55,10 +51,6 @@ export default {
     &.recovered {
       background-color: rgba($recovered-color, 0.35);
       border-color: $recovered-color;
-    }
-    &.tests {
-      background-color: rgba($tests-color, 0.35);
-      border-color: $tests-color;
     }
   }
   &__text {

@@ -1,3 +1,5 @@
+import numeral from "numeral";
+
 const NumberFormat = new Intl.NumberFormat("ru");
 const DateFormat = new Intl.DateTimeFormat("ru", {
   year: "numeric",
@@ -9,6 +11,9 @@ const DateFormat = new Intl.DateTimeFormat("ru", {
 });
 
 export const numberFormat = (value) => NumberFormat.format(value);
+
+export const numeralFormat = (value, format) => numeral(value).format(format);
+
 export const dateFormat = (value) => DateFormat.format(value);
 
 export const capitalize = (value) => {

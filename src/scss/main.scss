@@ -31,6 +31,14 @@ a {
   }
 }
 
+.pointer {
+  transition: 0.25s color ease;
+  cursor: pointer;
+  &:hover {
+    color: #fff !important;
+  }
+}
+
 .cases-text {
   color: $cases-color;
 }

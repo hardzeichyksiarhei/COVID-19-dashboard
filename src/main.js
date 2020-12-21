@@ -4,6 +4,7 @@ import store from "./store";
 import router from "./router";
 
 import PrimeVue from "primevue/config";
+import ToastService from "primevue/toastservice";
 
 import App from "./App.vue";
 
@@ -28,6 +29,7 @@ export const app = createApp(App);
 app.use(router);
 app.use(store);
 app.use(PrimeVue);
+app.use(ToastService);
 
 app.mount("#app");
 
