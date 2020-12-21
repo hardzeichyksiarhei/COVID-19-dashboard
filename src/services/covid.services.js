@@ -32,9 +32,9 @@ const getAll = async () => {
   };
 };
 
-const getHistoricalAll = async (population = null) => {
+const getHistoricalAll = async (lastdays = 30, population = null) => {
   const { data: historicalAll, status } = await axios.get(
-    `${API_COVID_URL}/historical/all?lastdays=30`
+    `${API_COVID_URL}/historical/all?lastdays=${lastdays}`
   );
   if (status !== 200 || !historicalAll) return null;
   if (!population) return null;

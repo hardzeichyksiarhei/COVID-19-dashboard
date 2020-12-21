@@ -19,6 +19,7 @@ export default {
     commit(types.REQUESTED_HISTORICAL_ALL);
     try {
       const historicalAll = await covidService.getHistoricalAll(
+        30,
         state.covidAll.population
       );
 

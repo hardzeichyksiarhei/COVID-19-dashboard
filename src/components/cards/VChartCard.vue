@@ -5,13 +5,13 @@
     </button>
 
     <div class="chart-card__indicator-select">
-      <v-indicators-select
+      <v-indicators-types-select
         width="100%"
         @change:indicator="handleChangeIndicator"
       />
     </div>
     <div v-if="historicalAll" class="chart-card__chart">
-      <Chart type="bar" :data="basicData" :options="options" />
+      <Chart :type="type" :data="basicData" :options="options" />
     </div>
   </div>
 </template>
@@ -19,7 +19,9 @@
 <script>
 import Chart from "primevue/chart";
 import { mapGetters } from "vuex";
-import VIndicatorsSelect from "../VIndicatorsSelect";
+import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
+
+import { dateFormat } from "../../services/formats.services";
 
 const LABELS_COLOR = {
   cases: "#C62828",
@@ -30,22 +32,13 @@ const LABELS_COLOR = {
 export default {
   name: "VChartCard",
 
-  components: { VIndicatorsSelect, Chart },
+  components: { VIndicatorsTypesSelect, Chart },
 
   props: ["isDialog"],
 
   data() {
     return {
       LABELS_COLOR,
-      options: {
-        scales: {
-          xAxes: [
-            {
-              display: false,
-            },
-          ],
-        },
-      },
     };
   },
 
@@ -53,23 +46,109 @@ export default {
     ...mapGetters({
       covidAll: "app/covidAll",
       historicalAll: "app/historicalAll",
+      currentCountry: "countries/currentCountry",
       currentIndicator: "countries/currentIndicator",
+      currentIndicatorType: "countries/currentIndicatorType",
     }),
-    basicData() {
-      return {
-        labels: Object.keys(
-          this.historicalAll["all"][this.currentIndicator.key]
-        ),
-        datasets: [
-          {
-            label: this.currentIndicator.label,
-            backgroundColor: LABELS_COLOR[this.currentIndicator.color],
-            data: Object.values(
-              this.historicalAll["all"][this.currentIndicator.key]
-            ),
+    type() {
+      const indicatorType = this.currentIndicatorType;
+
+      if (["all", "all100"].includes(indicatorType.key)) {
+        return "line";
+      }
+
+      return "bar";
+    },
+    options() {
+      if (!this.currentCountry) {
+        return {
+          tooltips: {
+            mode: "index",
+            intersect: false,
           },
-        ],
-      };
+          responsive: true,
+          scales: {
+            xAxes: [{}],
+            yAxes: [
+              {
+                ticks: {
+                  callback: (label) => (label ? label.toExponential() : label),
+                },
+              },
+            ],
+          },
+        };
+      }
+
+      return {};
+    },
+    basicData() {
+      const indicatorType = this.currentIndicatorType;
+
+      if (
+        !this.currentCountry &&
+        ["all", "all100"].includes(indicatorType.key)
+      ) {
+        return {
+          labels: Object.keys(
+            this.historicalAll[indicatorType.key][this.currentIndicator.key]
+          ),
+          datasets: [
+            {
+              label: "Cases",
+              borderColor: LABELS_COLOR["cases"],
+              fill: false,
+              data: Object.values(
+                this.historicalAll[indicatorType.key]["cases"]
+              ),
+            },
+            {
+              label: "Deaths",
+              borderColor: LABELS_COLOR["deaths"],
+              fill: false,
+              data: Object.values(
+                this.historicalAll[indicatorType.key]["deaths"]
+              ),
+            },
+            {
+              label: "Recovered",
+              borderColor: LABELS_COLOR["recovered"],
+              fill: false,
+              data: Object.values(
+                this.historicalAll[indicatorType.key]["recovered"]
+              ),
+            },
+          ],
+        };
+      }
+
+      if (
+        !this.currentCountry &&
+        ["today", "today100"].includes(indicatorType.key)
+      ) {
+        return {
+          labels: [dateFormat(new Date())],
+          datasets: [
+            {
+              label: "Cases",
+              backgroundColor: LABELS_COLOR["cases"],
+              data: [this.covidAll[indicatorType.key]["cases"]],
+            },
+            {
+              label: "Deaths",
+              backgroundColor: LABELS_COLOR["deaths"],
+              data: [this.covidAll[indicatorType.key]["deaths"]],
+            },
+            {
+              label: "Recovered",
+              backgroundColor: LABELS_COLOR["recovered"],
+              data: [this.covidAll[indicatorType.key]["recovered"]],
+            },
+          ],
+        };
+      }
+
+      return {};
     },
   },
 
