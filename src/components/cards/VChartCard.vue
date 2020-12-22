@@ -84,7 +84,15 @@ export default {
         },
         responsive: true,
         scales: {
-          xAxes: [{}],
+          xAxes: [{
+                type: 'time',
+                distribution: 'series',
+                time: {
+                    displayFormats: {
+                        quarter: 'MMM YYYY'
+                    }
+                }
+          }],
           yAxes: [
             {
               ticks: {
@@ -253,15 +261,14 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 100%;
     padding: 15px;
   }
 }
 
 .chart-card.is-dialog {
-  height: 85vh;
+  height: 80vh;
   .chart-card__chart {
-    width: 70%;
+    width: 65%;
     margin: 0 auto;
   }
 }
