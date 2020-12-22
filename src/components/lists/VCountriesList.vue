@@ -211,7 +211,7 @@ export default {
   left: 0;
   right: 0;
   background-color: var(--surface-a);
-  z-index: 1000;
+  z-index: 1100;
   padding: 20px;
   border-top: 1px solid var(--surface-d);
   transform: translateY(100%);

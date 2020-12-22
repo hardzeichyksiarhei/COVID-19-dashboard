@@ -103,9 +103,7 @@ export default {
         ["all", "all100"].includes(indicatorType.key)
       ) {
         return {
-          labels: Object.keys(
-            this.historicalAll[indicatorType.key][this.currentIndicator.key]
-          ),
+          labels: Object.keys(this.historicalAll[indicatorType.key]["cases"]),
           datasets: this.getAllDataset(this.historicalAll[indicatorType.key]),
         };
       }
@@ -126,7 +124,7 @@ export default {
       ) {
         return {
           labels: Object.keys(
-            this.historicalCountry[indicatorType.key][this.currentIndicator.key]
+            this.historicalCountry[indicatorType.key]["cases"]
           ),
           datasets: this.getAllDataset(
             this.historicalCountry[indicatorType.key]
