@@ -67,12 +67,8 @@ export default {
   }
 }
 
-.table-card__body.is-dialog {
-  height: 70vh;
-}
-
 .table-card.is-dialog {
-  height: 80vh;
+  height: 85vh;
 }
 
 @media screen and (max-width: 1366px) {

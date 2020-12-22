@@ -31,6 +31,10 @@ a {
   }
 }
 
+.d-block {
+  display: block !important;
+}
+
 .pointer {
   transition: 0.25s color ease;
   cursor: pointer;

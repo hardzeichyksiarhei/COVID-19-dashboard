@@ -51,6 +51,9 @@ export default {
 
 <style lang="scss" scoped>
 .countries-card {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 260px);
   position: relative;
   background: var(--surface-a);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -69,23 +72,9 @@ export default {
     padding-top: 13px;
     padding-bottom: 0;
   }
-
-  .countries-list {
-    background: transparent;
-    border: none;
-    border-radius: none;
-  }
-}
-
-.countries-card {
-  ::v-deep .countries-list .p-listbox-list-wrapper .p-listbox-list {
-    height: calc(100vh - 382px);
-  }
 }
 
 .countries-card.is-dialog {
-  ::v-deep .countries-list .p-listbox-list-wrapper .p-listbox-list {
-    height: 75vh;
-  }
+  height: 85vh;
 }
 </style>

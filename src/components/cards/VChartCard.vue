@@ -261,7 +261,7 @@ export default {
 }
 
 .chart-card.is-dialog {
-  height: 80vh;
+  height: 85vh;
   .chart-card__chart {
     width: 70%;
     margin: 0 auto;

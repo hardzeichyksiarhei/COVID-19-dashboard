@@ -237,8 +237,8 @@ export default {
   flex-grow: 1;
 }
 
-.map-card.is-dialog #map {
-  height: 80vh;
+.map-card.is-dialog {
+  height: 85vh;
 }
 
 ::v-deep .leaflet-container {
