@@ -15,7 +15,7 @@ export default {
     }
   },
 
-  async fetchHistoricalAll({ commit, state }, lastdays = 30) {
+  async fetchHistoricalAll({ commit, state }, lastdays = 60) {
     commit(types.REQUESTED_HISTORICAL_ALL);
     try {
       const historicalAll = await covidService.getHistoricalAll(
@@ -27,5 +27,9 @@ export default {
     } catch (error) {
       commit(types.REQUESTED_HISTORICAL_ALL_FAILED, error);
     }
+  },
+
+  setShowKeyboard({ commit }, isShowKeyboard) {
+    commit(types.SET_SHOW_KEYBOARD, isShowKeyboard);
   },
 };

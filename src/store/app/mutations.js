@@ -24,4 +24,8 @@ export default {
     state.covidAll = null;
     state.isHistoricalAllLoading = false;
   },
+
+  [types.SET_SHOW_KEYBOARD](state, isShowKeyboard) {
+    state.isShowKeyboard = isShowKeyboard;
+  },
 };

@@ -4,6 +4,8 @@ export const initialState = () => ({
 
   isHistoricalAllLoading: false,
   historicalAll: null,
+
+  isShowKeyboard: false,
 });
 
 // state

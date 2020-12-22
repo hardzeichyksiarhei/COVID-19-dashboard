@@ -3,6 +3,8 @@ import { createApp } from "vue";
 import store from "./store";
 import router from "./router";
 
+import mitt from "mitt";
+
 import PrimeVue from "primevue/config";
 import ToastService from "primevue/toastservice";
 
@@ -24,6 +26,8 @@ import "primeicons/primeicons.css";
 /* Main Style */
 import "./scss/main.scss";
 
+const emitter = mitt();
+
 export const app = createApp(App);
 
 app.use(router);
@@ -32,6 +36,9 @@ app.use(PrimeVue);
 app.use(ToastService);
 
 app.mount("#app");
+
+/* Global Emitter */
+app.config.globalProperties.emitter = emitter;
 
 /* Global Filters */
 app.config.globalProperties.$filters = {

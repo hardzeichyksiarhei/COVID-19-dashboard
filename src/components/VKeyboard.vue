@@ -7,21 +7,18 @@
 <script>
 import Keyboard from "simple-keyboard";
 import "simple-keyboard/build/css/index.css";
+import { mapGetters } from "vuex";
 
 export default {
-    name: "Keyboard",
+  name: "VKeyboard",
 
-    data() {
-        return {
-            isShowKeyboard: false,
-        };
-    },
+  computed: mapGetters({
+    isShowKeyboard: "app/isShowKeyboard",
+  }),
 
-    mounted() {
+  mounted() {
     const keyboard = new Keyboard({
-      onChange: (input) => {
-        this.search = input;
-      },
+      onChange: (input) => this.emitter.emit("keyboard:change", input),
       onKeyPress: (button) => onKeyPress(button),
       theme: "hg-theme-default hg-theme-dark",
     });
@@ -37,7 +34,7 @@ export default {
       keyboard.setOptions({ layoutName: shiftToggle });
     }
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

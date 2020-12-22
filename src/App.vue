@@ -33,6 +33,8 @@
     </div>
   </div>
 
+  <v-keyboard />
+
   <Toast />
 </template>
 
@@ -40,11 +42,12 @@
 import { mapGetters } from "vuex";
 
 import Toast from "primevue/toast";
+import VKeyboard from "./components/VKeyboard";
 
 export default {
   name: "App",
 
-  components: { Toast },
+  components: { Toast, VKeyboard },
 
   created() {
     this.$store.dispatch("app/fetchCovidAll");
