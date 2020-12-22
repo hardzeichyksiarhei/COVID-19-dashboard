@@ -10,11 +10,17 @@ const DateFormat = new Intl.DateTimeFormat("ru", {
   hour12: false,
 });
 
+const DateChartFormat = new Intl.DateTimeFormat("ru", {
+  month: "numeric",
+  day: "numeric",
+});
+
 export const numberFormat = (value) => NumberFormat.format(value);
 
 export const numeralFormat = (value, format) => numeral(value).format(format);
 
 export const dateFormat = (value) => DateFormat.format(value);
+export const dateChartFormat = (value) => DateChartFormat.format(value);
 
 export const capitalize = (value) => {
   if (!value) return "";

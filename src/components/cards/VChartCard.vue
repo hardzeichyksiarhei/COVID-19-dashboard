@@ -4,11 +4,19 @@
       <i class="pi pi-window-maximize"></i>
     </button>
 
-    <div class="chart-card__indicator-select">
+    <div
+      class="chart-card__indicator-select"
+      :class="{ full: !isIndicatorTypeAll }"
+    >
       <v-indicators-types-select width="100%" />
 
-      <span class="p-input-icon-right">
-        <i class="pi pi-arrow-right pointer" @click="handleChangeDays" />
+      <span class="p-input-icon-right" v-if="isIndicatorTypeAll">
+        <i
+          class="pi pi-arrow-right pointer"
+          v-if="!isHistoricalAllLoading"
+          @click="handleChangeDays"
+        />
+        <i class="pi pi-spin pi-spinner" v-else />
         <InputText
           :style="{ width: '100%' }"
           v-model="days"
@@ -33,7 +41,10 @@ import InputText from "primevue/inputtext";
 import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
 
 import covidService from "../../services/covid.services";
-import { numeralFormat, dateFormat } from "../../services/formats.services";
+import {
+  numeralFormat,
+  dateChartFormat,
+} from "../../services/formats.services";
 
 const LABELS_COLOR = {
   cases: "#C62828",
@@ -62,11 +73,15 @@ export default {
   computed: {
     ...mapGetters({
       covidAll: "app/covidAll",
+      isHistoricalAllLoading: "app/isHistoricalAllLoading",
       historicalAll: "app/historicalAll",
       currentCountry: "countries/currentCountry",
       currentIndicator: "countries/currentIndicator",
       currentIndicatorType: "countries/currentIndicatorType",
     }),
+    isIndicatorTypeAll() {
+      return ["all", "all100"].includes(this.currentIndicatorType.key);
+    },
     type() {
       const indicatorType = this.currentIndicatorType;
 
@@ -84,15 +99,13 @@ export default {
         },
         responsive: true,
         scales: {
-          xAxes: [{
-                type: 'time',
-                distribution: 'series',
-                time: {
-                    displayFormats: {
-                        quarter: 'MMM YYYY'
-                    }
-                }
-          }],
+          xAxes: [
+            {
+              ticks: {
+                callback: (label) => dateChartFormat(new Date(label)),
+              },
+            },
+          ],
           yAxes: [
             {
               ticks: {
@@ -121,7 +134,7 @@ export default {
         ["today", "today100"].includes(indicatorType.key)
       ) {
         return {
-          labels: [dateFormat(new Date())],
+          labels: [new Date()],
           datasets: this.getTodayDataset(this.covidAll[indicatorType.key]),
         };
       }
@@ -145,7 +158,7 @@ export default {
         ["today", "today100"].includes(indicatorType.key)
       ) {
         return {
-          labels: [dateFormat(new Date())],
+          labels: [new Date()],
           datasets: this.getTodayDataset(
             this.currentCountry[indicatorType.key]
           ),
@@ -255,6 +268,9 @@ export default {
     padding: 1rem;
     padding-top: 13px;
     padding-bottom: 0;
+    &.full {
+      grid-template-columns: 100%;
+    }
   }
 
   &__chart {
