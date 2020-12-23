@@ -79,4 +79,16 @@ export default {
     font-size: 32px;
   }
 }
+
+@media screen and (max-width: 1366px) {
+  .global-country-info-card {
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .global-country-info-card {
+    margin-bottom: 20px;
+  }
+}
 </style>

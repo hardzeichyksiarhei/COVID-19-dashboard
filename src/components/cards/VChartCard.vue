@@ -274,6 +274,7 @@ export default {
   }
 
   &__chart {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -290,6 +291,13 @@ export default {
 }
 
 @media screen and (max-width: 1366px) {
+  .chart-card {
+    margin-top: 10px;
+    height: calc(45vh - 75px);
+  }
+}
+
+@media screen and (max-width: 1023px) {
   .chart-card {
     margin-top: 0;
     height: 50vh;

@@ -71,7 +71,7 @@ export default {
   height: 85vh;
 }
 
-@media screen and (max-width: 1366px) {
+@media screen and (max-width: 1023px) {
   .table-card {
     margin-top: 0;
     height: 50vh;

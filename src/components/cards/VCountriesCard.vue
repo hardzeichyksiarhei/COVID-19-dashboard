@@ -77,4 +77,16 @@ export default {
 .countries-card.is-dialog {
   height: 85vh;
 }
+
+@media screen and (max-width: 1366px) {
+  .countries-card {
+    height: calc(100vh - 250px);
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .countries-card {
+    height: calc(100vh - 260px);
+  }
+}
 </style>

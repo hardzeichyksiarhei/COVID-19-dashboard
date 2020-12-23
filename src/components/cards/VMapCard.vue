@@ -9,7 +9,7 @@
         <v-indicators-types-select width="100%" />
         <v-indicators-select width="100%" />
       </div>
-      <v-map-legend />
+      <v-map-legend position="outside-map" />
     </div>
 
     <div id="map">
@@ -33,6 +33,11 @@
         <l-control position="bottomleft">
           <div class="current-country-info">
             <v-current-country-info-card v-if="currentCountry" />
+          </div>
+        </l-control>
+        <l-control position="bottomright">
+          <div class="current-country-info">
+            <v-map-legend position="inside-map" />
           </div>
         </l-control>
 
