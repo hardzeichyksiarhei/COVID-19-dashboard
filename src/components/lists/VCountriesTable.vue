@@ -4,30 +4,32 @@
     :value="tableCountry"
     :scrollable="true"
     scrollHeight="flex"
+    :sortField="`${this.currentIndicatorType.key}.cases`"
+    :sortOrder="-1"
   >
     <Column
       field="name"
       header="Country"
       bodyClass="countries-table__content country"
-      sortable
+      sortable="true"
     ></Column>
     <Column
       :field="`${this.currentIndicatorType.key}.cases`"
       header="Cases"
       bodyClass="countries-table__content cases-text"
-      sortable
+      sortable="true"
     ></Column>
     <Column
       :field="`${this.currentIndicatorType.key}.deaths`"
       header="Deaths"
       bodyClass="countries-table__content deaths-text"
-      sortable
+      sortable="true"
     ></Column>
     <Column
       :field="`${this.currentIndicatorType.key}.recovered`"
       header="Recovered"
       bodyClass="countries-table__content recovered-text"
-      sortable
+      sortable="true"
     ></Column>
   </DataTable>
 </template>
