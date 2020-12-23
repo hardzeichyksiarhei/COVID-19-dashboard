@@ -309,5 +309,11 @@ export default {
   .chart-card {
     height: auto;
   }
+
+  .chart-card.is-dialog {
+    .chart-card__chart {
+      width: 100%;
+    }
+  }
 }
 </style>

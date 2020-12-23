@@ -149,3 +149,9 @@ a {
 .fade-leave-to {
   opacity: 0;
 }
+
+@media screen and (max-width: 576px) {
+  .maximize-btn {
+    opacity: 1;
+  }
+}
