@@ -66,7 +66,7 @@ export default {
       historicalCountry: null,
 
       currentDate: new Date(),
-      days: null,
+      days: 30,
     };
   },
 
@@ -120,7 +120,7 @@ export default {
       const indicatorType = this.currentIndicatorType;
 
       if (
-        !this.currentCountry &&
+        !this.historicalCountry &&
         ["all", "all100"].includes(indicatorType.key)
       ) {
         return {
@@ -130,7 +130,7 @@ export default {
       }
 
       if (
-        !this.currentCountry &&
+        !this.historicalCountry &&
         ["today", "today100"].includes(indicatorType.key)
       ) {
         return {
@@ -154,13 +154,13 @@ export default {
       }
 
       if (
-        this.currentCountry &&
+        this.historicalCountry &&
         ["today", "today100"].includes(indicatorType.key)
       ) {
         return {
           labels: [new Date()],
           datasets: this.getTodayDataset(
-            this.currentCountry[indicatorType.key]
+            this.historicalCountry[indicatorType.key]
           ),
         };
       }
@@ -171,30 +171,34 @@ export default {
 
   watch: {
     async currentCountry(country) {
+      if (this.days < 5 || this.days > 100) this.days = 30;
+
       if (!country) {
         this.historicalCountry = null;
+        this.$store.dispatch("app/fetchHistoricalAll", this.days);
         return;
       }
-      const historicalCountry = await covidService.getHistoricalCountry(
-        country.id,
-        this.days || 30,
-        this.covidAll.population
-      );
 
-      this.historicalCountry = historicalCountry;
+      this.historicalCountry = await this.fetchHistoricalCountry(country);
     },
   },
 
   methods: {
+    async fetchHistoricalCountry(country) {
+      const historicalCountry = await covidService.getHistoricalCountry(
+        country.id,
+        this.days,
+        this.covidAll.population
+      );
+
+      return historicalCountry;
+    },
     handleChangeDays() {
-      if (!this.days || this.days < 5 || this.days > 100) {
+      if (this.days < 5 || this.days > 100) {
         this.$toast.add({
           severity: "warn",
           summary: "Warning",
-          detail: !this.days
-            ? "Number of last days empty"
-            : "The number of the last days must be in the range [5, 100]",
-          life: 3000,
+          detail: "The number of the last days must be in the range [5, 100]",
         });
         return;
       }

@@ -11,25 +11,25 @@
       field="name"
       header="Country"
       bodyClass="countries-table__content country"
-      sortable="true"
+      :sortable="true"
     ></Column>
     <Column
       :field="`${this.currentIndicatorType.key}.cases`"
       header="Cases"
       bodyClass="countries-table__content cases-text"
-      sortable="true"
+      :sortable="true"
     ></Column>
     <Column
       :field="`${this.currentIndicatorType.key}.deaths`"
       header="Deaths"
       bodyClass="countries-table__content deaths-text"
-      sortable="true"
+      :sortable="true"
     ></Column>
     <Column
       :field="`${this.currentIndicatorType.key}.recovered`"
       header="Recovered"
       bodyClass="countries-table__content recovered-text"
-      sortable="true"
+      :sortable="true"
     ></Column>
   </DataTable>
 </template>
