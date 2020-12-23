@@ -9,25 +9,25 @@
       field="name"
       header="Country"
       bodyClass="countries-table__content country"
-      sortable="true"
+      sortable
     ></Column>
     <Column
       :field="`${this.currentIndicatorType.key}.cases`"
       header="Cases"
       bodyClass="countries-table__content cases-text"
-      sortable="true"
+      sortable
     ></Column>
     <Column
       :field="`${this.currentIndicatorType.key}.deaths`"
       header="Deaths"
       bodyClass="countries-table__content deaths-text"
-      sortable="true"
+      sortable
     ></Column>
     <Column
       :field="`${this.currentIndicatorType.key}.recovered`"
       header="Recovered"
       bodyClass="countries-table__content recovered-text"
-      sortable="true"
+      sortable
     ></Column>
   </DataTable>
 </template>
@@ -76,17 +76,21 @@ export default {
     border-radius: 4px;
   }
 }
-// .p-column-title{
-//   font-size: 0.5rem;
-// }
-// .pi{
-//   font-size: 0.4rem !important;
-// }
+
 .countries-table {
+  .p-sortable-column {
+    font-size: 14px;
+    padding: 20px 10px !important;
+    white-space: nowrap;
+    .p-sortable-column-icon {
+      font-size: 14px !important;
+    }
+  }
   &.is-dialog {
     height: 80vh;
   }
   &__content {
+    font-size: 14px;
     &.country {
       color: white;
     }
