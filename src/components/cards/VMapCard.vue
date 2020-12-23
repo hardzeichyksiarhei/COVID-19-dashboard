@@ -27,7 +27,7 @@
         @ready="handleReadyMap"
       >
         <l-tile-layer
-          url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+          :url="`https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=${API_MAP_KEY}`"
           attribution="COVID-19"
         ></l-tile-layer>
         <l-control position="bottomleft">
@@ -84,6 +84,8 @@ import VIndicatorsSelect from "../VIndicatorsSelect";
 import VIndicatorsTypesSelect from "../VIndicatorsTypesSelect";
 import VMapLegend from "../VMapLegend.vue";
 import VCurrentCountryInfoCard from "./VCurrentCountryInfoCard";
+
+import { API_MAP_KEY } from "../../config";
 
 const FILL_COLOR = {
   cases: "var(--cases-color)",
@@ -181,6 +183,7 @@ export default {
     };
 
     return {
+      API_MAP_KEY,
       FILL_COLOR,
       zoom,
       center,
