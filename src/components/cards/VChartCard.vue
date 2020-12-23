@@ -199,6 +199,7 @@ export default {
           severity: "warn",
           summary: "Warning",
           detail: "The number of the last days must be in the range [5, 100]",
+          life: 3000,
         });
         return;
       }
