@@ -75,6 +75,7 @@ export default {
   .table-card {
     margin-top: 0;
     height: 50vh;
+    min-height: 360px;
   }
 }
 </style>

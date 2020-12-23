@@ -293,6 +293,7 @@ export default {
   .chart-card {
     margin-top: 0;
     height: 50vh;
+    min-height: 360px;
   }
 }
 
