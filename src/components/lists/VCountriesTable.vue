@@ -9,21 +9,25 @@
       field="name"
       header="Country"
       bodyClass="countries-table__content country"
+      sortable="true"
     ></Column>
     <Column
       :field="`${this.currentIndicatorType.key}.cases`"
       header="Cases"
       bodyClass="countries-table__content cases-text"
+      sortable="true"
     ></Column>
     <Column
       :field="`${this.currentIndicatorType.key}.deaths`"
       header="Deaths"
       bodyClass="countries-table__content deaths-text"
+      sortable="true"
     ></Column>
     <Column
       :field="`${this.currentIndicatorType.key}.recovered`"
       header="Recovered"
       bodyClass="countries-table__content recovered-text"
+      sortable="true"
     ></Column>
   </DataTable>
 </template>
@@ -56,7 +60,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" >
 .p-datatable-scrollable-body {
   overflow-y: auto !important;
   &::-webkit-scrollbar {
@@ -72,6 +76,12 @@ export default {
     border-radius: 4px;
   }
 }
+// .p-column-title{
+//   font-size: 0.5rem;
+// }
+// .pi{
+//   font-size: 0.4rem !important;
+// }
 .countries-table {
   &.is-dialog {
     height: 80vh;
