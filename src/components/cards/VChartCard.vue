@@ -13,7 +13,7 @@
       <span class="p-input-icon-right" v-if="isIndicatorTypeAll">
         <i
           class="pi pi-arrow-right pointer"
-          v-if="!isHistoricalAllLoading"
+          v-if="!isHistoricalAllLoading && !isHistoricalCountryLoading"
           @click="handleChangeDays"
         />
         <i class="pi pi-spin pi-spinner" v-else />
@@ -63,6 +63,7 @@ export default {
     return {
       LABELS_COLOR,
 
+      isHistoricalCountryLoading: false,
       historicalCountry: null,
 
       currentDate: new Date(),
@@ -185,15 +186,17 @@ export default {
 
   methods: {
     async fetchHistoricalCountry(country) {
+      this.isHistoricalCountryLoading = true;
       const historicalCountry = await covidService.getHistoricalCountry(
         country.id,
         this.days,
         this.covidAll.population
       );
+      this.isHistoricalCountryLoading = false;
 
       return historicalCountry;
     },
-    handleChangeDays() {
+    async handleChangeDays() {
       if (this.days < 5 || this.days > 100) {
         this.$toast.add({
           severity: "warn",
@@ -203,7 +206,14 @@ export default {
         });
         return;
       }
-      this.$store.dispatch("app/fetchHistoricalAll", this.days);
+
+      if (this.currentCountry) {
+        this.historicalCountry = await this.fetchHistoricalCountry(
+          this.currentCountry
+        );
+      } else {
+        this.$store.dispatch("app/fetchHistoricalAll", this.days);
+      }
     },
     getTodayDataset(data) {
       return [
