@@ -10,7 +10,7 @@ const DateFormat = new Intl.DateTimeFormat("ru", {
   hour12: false,
 });
 
-const DateChartFormat = new Intl.DateTimeFormat("en", {
+const DateChartFormat = new Intl.DateTimeFormat("ru", {
   month: "numeric",
   day: "numeric",
 });
