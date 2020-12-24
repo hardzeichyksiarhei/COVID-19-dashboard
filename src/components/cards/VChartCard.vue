@@ -121,7 +121,7 @@ export default {
       const indicatorType = this.currentIndicatorType;
 
       if (
-        !this.historicalCountry &&
+        !this.currentCountry &&
         ["all", "all100"].includes(indicatorType.key)
       ) {
         return {
@@ -131,7 +131,7 @@ export default {
       }
 
       if (
-        !this.historicalCountry &&
+        !this.currentCountry &&
         ["today", "today100"].includes(indicatorType.key)
       ) {
         return {
@@ -155,13 +155,13 @@ export default {
       }
 
       if (
-        this.historicalCountry &&
+        this.currentCountry &&
         ["today", "today100"].includes(indicatorType.key)
       ) {
         return {
           labels: [new Date()],
           datasets: this.getTodayDataset(
-            this.historicalCountry[indicatorType.key]
+            this.currentCountry[indicatorType.key]
           ),
         };
       }
