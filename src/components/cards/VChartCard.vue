@@ -44,7 +44,7 @@ import covidService from "../../services/covid.services";
 import {
   numeralFormat,
   dateChartFormat,
-  dateChartLabelFormat,
+  //dateChartLabelFormat,
 } from "../../services/formats.services";
 
 const LABELS_COLOR = {
@@ -98,11 +98,11 @@ export default {
         tooltips: {
           mode: "index",
           intersect: false,
-          callbacks: {
-            title(tooltipItem) {
-              return dateChartLabelFormat(tooltipItem.label);
-            },
-          },
+          // callbacks: {
+          //   title(tooltipItem) {
+          //     return dateChartLabelFormat(tooltipItem.label);
+          //   },
+          // },
         },
         responsive: true,
         scales: {
