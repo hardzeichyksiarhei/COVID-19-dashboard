@@ -190,6 +190,18 @@ export default {
     },
   },
 
+  async created() {
+    if (!this.currentCountry) {
+      this.historicalCountry = null;
+      this.$store.dispatch("app/fetchHistoricalAll", this.days);
+      return;
+    }
+
+    this.historicalCountry = await this.fetchHistoricalCountry(
+      this.currentCountry
+    );
+  },
+
   methods: {
     async fetchHistoricalCountry(country) {
       this.isHistoricalCountryLoading = true;
